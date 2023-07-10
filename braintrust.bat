@@ -1,1 +1,1 @@
-@node --no-warnings braintrust.js %*
+@node --no-warnings cli.js %*
