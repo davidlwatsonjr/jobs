@@ -1,5 +1,4 @@
 const {myPreferredJobResults} = require("./braintrust.js");
-const {sendText} = require("./twilio.js");
 
 require("dotenv").config();
 
@@ -31,10 +30,4 @@ require("dotenv").config();
     }))
   );
   console.log(jobs.length);
-
-  if (jobs.length > 0) {
-    await sendText(
-      `${jobs.length} new Braintrust jobs available. https://app.usebraintrust.com/jobs/${jobs[0].id}/`
-    );
-  }
 })();
