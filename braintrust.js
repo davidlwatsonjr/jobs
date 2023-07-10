@@ -1,13 +1,9 @@
-const twilio = require("twilio");
+const {sendText} = require("./twilio.js");
 
 require("dotenv").config();
 const {
   BRAINTRUST_SESSION_ID,
   BRAINTRUST_API_BASE_URL,
-  TWILIO_ACCOUNT_SID,
-  TWILIO_AUTH_TOKEN,
-  TWILIO_FROM_NUMBER,
-  TWILIO_TO_NUMBER,
 } = process.env;
 
 const ENGINEERING_ROLE_ID = 5;
@@ -100,15 +96,6 @@ const getBraintrustMatchLevels = async () => {
   return Array.from(
     new Set(openJobs.results.map((job) => job.skills_match_level))
   );
-};
-
-const sendText = async (message) => {
-  const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
-  return await client.messages.create({
-    body: message,
-    from: TWILIO_FROM_NUMBER,
-    to: TWILIO_TO_NUMBER,
-  });
 };
 
 (async () => {
