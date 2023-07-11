@@ -8,8 +8,9 @@ app.get('/', async (req, res) => {
   const jobs = await myPreferredJobResults();
 
   if (jobs.length > 0) {
+    const randomJobId = jobs[Math.floor(Math.random() * jobs.length)].id;
     await sendText(
-      `${jobs.length} new Braintrust jobs available. https://app.usebraintrust.com/jobs/${jobs[0].id}/`
+      `${jobs.length} new Braintrust jobs available. https://app.usebraintrust.com/jobs/${randomJobId}/`
     );
   }
 
