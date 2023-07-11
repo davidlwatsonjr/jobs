@@ -7,7 +7,7 @@ const {
 const ENGINEERING_ROLE_ID = 5;
 
 const desiredHourlyBudgetMinimumUsd = 100;
-const undesiredJobIds = [];
+const undesiredJobIds = [7183];
 const undesiredEmployerNames = [];
 const undesiredLocations = [];
 const undesiredSkillMatchLevels = ["No match"];
