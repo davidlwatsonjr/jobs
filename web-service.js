@@ -13,7 +13,7 @@ app.get('/', async (req, res) => {
   }));
 
   if (jobs.length > 0 && textToNumber) {
-    const randomJobFullLink = jobs[Math.floor(Math.random() * jobs.length)].id;
+    const randomJobFullLink = jobs[Math.floor(Math.random() * jobs.length)].full_link;
     await sendText(
       `${jobs.length} new Braintrust jobs available. ${randomJobFullLink}`, textToNumber
     );
