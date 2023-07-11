@@ -16,7 +16,7 @@ app.get('/', async (req, res) => {
     );
   }
 
-  res.send(jobs);
+  res.send({ count: jobs.length, jobs });
 });
 
 const PORT = process.env.PORT || 8080;
