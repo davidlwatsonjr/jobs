@@ -2,15 +2,20 @@ require("dotenv").config();
 const {
   BRAINTRUST_SESSION_ID,
   BRAINTRUST_API_BASE_URL,
+  DESIRED_HOURLY_BUDGET_MINIMUM_USD,
+  UNDESIRED_JOB_IDS,
+  UNDESIRED_EMPLOYER_NAMES,
+  UNDESIRED_LOCATIONS,
+  UNDESIRED_SKILL_MATCH_LEVELS,
 } = process.env;
 
 const ENGINEERING_ROLE_ID = 5;
 
-const desiredHourlyBudgetMinimumUsd = 100;
-const undesiredJobIds = [7183];
-const undesiredEmployerNames = [];
-const undesiredLocations = [];
-const undesiredSkillMatchLevels = ["No match"];
+const desiredHourlyBudgetMinimumUsd = Number(DESIRED_HOURLY_BUDGET_MINIMUM_USD);
+const undesiredJobIds = UNDESIRED_JOB_IDS.split('|').map(Number);
+const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split('|');
+const undesiredLocations = UNDESIRED_LOCATIONS.split('|');
+const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split('|');
 
 const defaultJobSearchParams = {
   page: 1,
