@@ -1,6 +1,7 @@
 const express = require('express');
 const { myPreferredJobResults } = require('./braintrust');
 const { sendText } = require('./twilio');
+const { getWeWorkRemotelyFeed } = require('./weworkremotely');
 
 const app = express();
 
@@ -21,6 +22,14 @@ app.get('/', async (req, res) => {
 
 
   res.send({ count: jobs.length, links: jobs.map(job => job.full_link), jobs });
+});
+
+app.get('/weworkremotely', async (req, res) => {
+  const weworkremotelyFeed = await getWeWorkRemotelyFeed();
+
+  const jobs = weworkremotelyFeed.items.map(item => ({ title: item.title, link: item.link, category: item.category }));
+
+  res.send({ count: jobs.length, links: jobs.map(job => job.link), jobs });
 });
 
 const PORT = process.env.PORT || 8080;
