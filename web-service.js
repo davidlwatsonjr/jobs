@@ -5,7 +5,7 @@ const { getWeWorkRemotelyFeed } = require('./weworkremotely');
 
 const app = express();
 
-app.get('/ping', (req, res) => {
+app.get('/ping', async (req, res) => {
   res.send('pong');
 });
 
