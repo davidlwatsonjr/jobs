@@ -5,6 +5,10 @@ const { getWeWorkRemotelyFeed } = require('./weworkremotely');
 
 const app = express();
 
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 app.get('/', async (req, res) => {
   const { textToNumber } = req.query;
 
