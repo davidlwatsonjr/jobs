@@ -14,7 +14,7 @@ app.get('/ping', async (req, res) => {
   res.send('pong');
 });
 
-app.get('/', async (req, res) => {
+app.get('/braintrust', async (req, res) => {
   const { textToNumber } = req.query;
 
   const jobs = (await myPreferredJobResults()).map(job => ({
