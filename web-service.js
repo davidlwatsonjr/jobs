@@ -10,6 +10,13 @@ const FEED_URLS = {
 
 const app = express();
 
+app.use(express.static('public'));
+
+app.use((req, res, next) => {
+  console.log(`${req.method} request for '${req.url}'`);
+  next();
+});
+
 app.get('/ping', async (req, res) => {
   res.send('pong');
 });
