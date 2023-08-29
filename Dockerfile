@@ -19,4 +19,4 @@ RUN npm ci --only=production
 COPY . ./
 
 # Run the web service on container startup.
-CMD ["node", "web-service.js"]
+CMD ["npm", "start"]
