@@ -39,6 +39,16 @@ app.get('/braintrust', async (req, res) => {
   res.send({ count: jobs.length, links: jobs.map(job => job.full_link), jobs });
 });
 
+app.get('/braintrust.html', async (req, res) => {
+  const jobs = (await myPreferredJobResults()).map(job => ({
+    full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
+    ...job
+  }));
+
+  res.render('braintrust.ejs', { jobs });
+});
+
+
 app.get('/nodesk', async (req, res) => {
   res.send(await getFeedsResults([FEED_URLS.NO_DESK]));
 });
