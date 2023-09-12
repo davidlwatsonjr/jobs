@@ -31,7 +31,7 @@ app.get('/braintrust', async (req, res) => {
 });
 
 app.get('/braintrust.html', async (req, res) => {
-  res.render('braintrust.ejs', { jobs: await myPreferredJobResults() });
+  res.render('braintrust.ejs', { jobs: await myPreferredJobResults(), title: "Braintrust" });
 });
 
 
