@@ -1,6 +1,6 @@
 const express = require('express');
 const { myPreferredJobResults } = require('./braintrust');
-const { sendText } = require('./twilio');
+const { sendText, textRandomJob } = require('./twilio');
 const { getFeedsResults } = require('./feeds');
 
 const FEED_URLS = {
@@ -22,30 +22,16 @@ app.get('/ping', async (req, res) => {
 });
 
 app.get('/braintrust', async (req, res) => {
+  const jobs = await myPreferredJobResults();
+
   const { textToNumber } = req.query;
-
-  const jobs = (await myPreferredJobResults()).map(job => ({
-    full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
-    ...job
-  }));
-
-  if (jobs.length > 0 && textToNumber) {
-    const randomJobFullLink = jobs[Math.floor(Math.random() * jobs.length)].full_link;
-    await sendText(
-      `${jobs.length} new Braintrust jobs available. ${randomJobFullLink}`, textToNumber
-    );
-  }
+  textRandomJob(jobs, textToNumber);
 
   res.send({ count: jobs.length, links: jobs.map(job => job.full_link), jobs });
 });
 
 app.get('/braintrust.html', async (req, res) => {
-  const jobs = (await myPreferredJobResults()).map(job => ({
-    full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
-    ...job
-  }));
-
-  res.render('braintrust.ejs', { jobs });
+  res.render('braintrust.ejs', { jobs: await myPreferredJobResults() });
 });
 
 

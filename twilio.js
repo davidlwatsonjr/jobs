@@ -17,6 +17,16 @@ const sendText = async (message, toNumber) => {
   });
 };
 
+const textRandomJob = async (jobs, toNumber) => {
+  if (jobs.length > 0 && toNumber) {
+    const randomJobFullLink = jobs[Math.floor(Math.random() * jobs.length)].full_link;
+    await sendText(
+      `${jobs.length} new Braintrust jobs available. ${randomJobFullLink}`, toNumber
+    );
+  }
+}
+
 module.exports = {
-  sendText
+  sendText,
+  textRandomJob,
 };

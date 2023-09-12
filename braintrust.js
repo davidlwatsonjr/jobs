@@ -74,7 +74,11 @@ const searchOpenJobs = async (criteria) => {
     `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
     fetchHeaders
   );
-  return await response.json();
+  const openJobs = await response.json();
+  return openJobs.results.map((job) => ({
+    full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
+    ...job
+  }));
 };
 
 const getMatchingOpenEngineeringJobs = async () => {
@@ -82,7 +86,7 @@ const getMatchingOpenEngineeringJobs = async () => {
     role: ENGINEERING_ROLE_ID,
     hourly_budget_minimum_usd: desiredHourlyBudgetMinimumUsd,
   });
-  return openJobs.results.filter(
+  return openJobs.filter(
     (job) => !undesiredSkillMatchLevels.includes(job.skills_match_level)
   );
 };
@@ -97,7 +101,7 @@ const getUnappliedMatchingOpenEngineeringJobs = async () => {
 const getBraintrustMatchLevels = async () => {
   const openJobs = await searchOpenJobs();
   return Array.from(
-    new Set(openJobs.results.map((job) => job.skills_match_level))
+    new Set(openJobs.map((job) => job.skills_match_level))
   );
 };
 
