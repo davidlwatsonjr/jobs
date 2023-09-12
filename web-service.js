@@ -31,9 +31,12 @@ app.get('/braintrust', async (req, res) => {
 });
 
 app.get('/braintrust.html', async (req, res) => {
-  res.render('feeds.ejs', { jobs: await myPreferredJobResults(), title: "Braintrust" });
+  res.render('braintrust.ejs', { jobs: await myPreferredJobResults() });
 });
 
+app.get('/feeds.html', async (req, res) => {
+  res.render('feeds.ejs', { jobs: (await getFeedsResults(Object.values(FEED_URLS))).jobs });
+});
 
 app.get('/nodesk', async (req, res) => {
   res.send(await getFeedsResults([FEED_URLS.NO_DESK]));
