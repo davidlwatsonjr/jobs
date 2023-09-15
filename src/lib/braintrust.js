@@ -77,6 +77,7 @@ const searchOpenJobs = async (criteria) => {
   const openJobs = await response.json();
   return openJobs.results.map((job) => ({
     full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
+    createdDate: new Date(job.created).toLocaleDateString(),
     ...job
   }));
 };

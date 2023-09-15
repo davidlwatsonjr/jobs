@@ -1,7 +1,8 @@
+const path = require('path');
 const express = require('express');
-const { myPreferredJobResults } = require('./braintrust');
-const { sendText, textRandomJob } = require('./twilio');
-const { getFeedsResults } = require('./feeds');
+const { myPreferredJobResults } = require('./lib/braintrust');
+const { textRandomJob } = require('./lib/twilio');
+const { getFeedsResults } = require('./lib/feeds');
 
 const FEED_URLS = {
   NO_DESK: 'https://nodesk.co/remote-jobs/index.xml',
@@ -11,6 +12,7 @@ const FEED_URLS = {
 const app = express();
 
 app.use(express.static('public'));
+app.set('views', path.join(__dirname, '/views'));
 
 app.use((req, res, next) => {
   console.log(`${req.method} request for '${req.url}'`);

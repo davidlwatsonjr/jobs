@@ -1,4 +1,4 @@
-const {myPreferredJobResults} = require("./braintrust.js");
+const {myPreferredJobResults} = require("lib/braintrust.js");
 
 require("dotenv").config();
 

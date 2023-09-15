@@ -5,7 +5,9 @@ const getFeedsResults = async (feedUrls) => {
   const feedItems = feedResults.flatMap(feedResult => feedResult.items);
   feedItems.sort((a, b) => { return b.created - a.created });
 
-  const jobs = feedItems.map(item => ({ title: item.title, full_link: item.link }));
+  const jobs = feedItems.map(job => ({
+    title: job.title, full_link: job.link, createdDate: new Date(job.created).toLocaleDateString(),
+  }));
   const links = jobs.map(job => job.full_link);
   const count = jobs.length;
 
