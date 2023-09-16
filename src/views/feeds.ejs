@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feeds</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Feeds Job Links (<%= jobs.length %>)</h1>
     <ul>
-        <% for (let i = 0; i < jobs.length; i++) { %>
-            <li><a href="<%= jobs[i].full_link %>"><%= jobs[i].title %> (<%= jobs[i].createdDate %>)</a></li>
-        <% } %>
+      <% for (let i = 0; i < jobs.length; i++) { %>
+      <li>
+        <a href="<%= jobs[i].full_link %>"
+          ><%= jobs[i].title %> (<%= jobs[i].createdDate %>)</a
+        >
+      </li>
+      <% } %>
     </ul>
-</body>
+  </body>
 </html>

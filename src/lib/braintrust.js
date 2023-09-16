@@ -1,4 +1,3 @@
-require("dotenv").config();
 const {
   BRAINTRUST_SESSION_ID,
   BRAINTRUST_API_BASE_URL,
@@ -12,10 +11,10 @@ const {
 const ENGINEERING_ROLE_ID = 5;
 
 const desiredHourlyBudgetMinimumUsd = Number(DESIRED_HOURLY_BUDGET_MINIMUM_USD);
-const undesiredJobIds = UNDESIRED_JOB_IDS.split('|').map(Number);
-const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split('|');
-const undesiredLocations = UNDESIRED_LOCATIONS.split('|');
-const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split('|');
+const undesiredJobIds = UNDESIRED_JOB_IDS.split("|").map(Number);
+const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split("|");
+const undesiredLocations = UNDESIRED_LOCATIONS.split("|");
+const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split("|");
 
 const defaultJobSearchParams = {
   page: 1,
@@ -78,7 +77,7 @@ const searchOpenJobs = async (criteria) => {
   return openJobs.results.map((job) => ({
     full_link: `https://app.usebraintrust.com/jobs/${job.id}`,
     createdDate: new Date(job.created).toLocaleDateString(),
-    ...job
+    ...job,
   }));
 };
 
@@ -101,9 +100,7 @@ const getUnappliedMatchingOpenEngineeringJobs = async () => {
 
 const getBraintrustMatchLevels = async () => {
   const openJobs = await searchOpenJobs();
-  return Array.from(
-    new Set(openJobs.map((job) => job.skills_match_level))
-  );
+  return Array.from(new Set(openJobs.map((job) => job.skills_match_level)));
 };
 
 const myPreferredJobResults = async () => {
@@ -115,9 +112,10 @@ const myPreferredJobResults = async () => {
         undesiredLocations.some((location) =>
           job.locations.map(({ location }) => location).includes(location)
         )
-      ));
-}
+      )
+  );
+};
 
 module.exports = {
-  myPreferredJobResults
-}
+  myPreferredJobResults,
+};
