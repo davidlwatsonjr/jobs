@@ -9,14 +9,26 @@ const sendText = async (body, to) => {
   return await fetch(url, { headers });
 };
 
+const textFirstJob = async (jobs, toNumber) => {
+  if (jobs.length > 0 && toNumber) {
+    console.log(`Texting first job out of ${jobs.length} to ${toNumber}.`);
+
+    const firstJobFullLink = jobs[0].full_link;
+    await sendText(
+      `${jobs.length} new jobs available. First: ${firstJobFullLink}`,
+      toNumber
+    );
+  }
+};
+
 const textRandomJob = async (jobs, toNumber) => {
   if (jobs.length > 0 && toNumber) {
-    console.log(`Texting random job out of ${jobs.length} jobs to ${toNumber}`);
+    console.log(`Texting random job out of ${jobs.length} to ${toNumber}.`);
 
     const randomJobFullLink =
       jobs[Math.floor(Math.random() * jobs.length)].full_link;
     await sendText(
-      `${jobs.length} new Braintrust jobs available. ${randomJobFullLink}`,
+      `${jobs.length} new jobs available. Random: ${randomJobFullLink}`,
       toNumber
     );
   }
@@ -24,5 +36,6 @@ const textRandomJob = async (jobs, toNumber) => {
 
 module.exports = {
   sendText,
+  textFirstJob,
   textRandomJob,
 };

@@ -104,7 +104,7 @@ const getBraintrustMatchLevels = async () => {
 };
 
 const myPreferredJobResults = async () => {
-  return (await getUnappliedMatchingOpenEngineeringJobs()).filter(
+  const jobs = (await getUnappliedMatchingOpenEngineeringJobs()).filter(
     (job) =>
       !(
         undesiredEmployerNames.includes(job.employer.name) ||
@@ -114,6 +114,12 @@ const myPreferredJobResults = async () => {
         )
       )
   );
+
+  return {
+    count: jobs.length,
+    links: jobs.map((job) => job.full_link),
+    jobs,
+  };
 };
 
 module.exports = {

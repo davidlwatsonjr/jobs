@@ -4,7 +4,7 @@ const path = require("path");
 const express = require("express");
 const { myPreferredJobResults } = require("./lib/braintrust");
 const { getFeedsResults } = require("./lib/feeds");
-const { textRandomJob } = require("./lib/texter");
+const { textRandomJob, textFirstJob } = require("./lib/texter");
 
 const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
@@ -27,26 +27,27 @@ app.get("/ping", async (req, res) => {
 });
 
 app.get("/braintrust", async (req, res) => {
-  const jobs = await myPreferredJobResults();
+  const jobResults = await myPreferredJobResults();
 
-  const { textToNumber } = req.query;
-  textRandomJob(jobs, textToNumber);
+  textRandomJob(jobResults.jobs, req.query.textToNumber);
 
-  res.send({
-    count: jobs.length,
-    links: jobs.map((job) => job.full_link),
-    jobs,
-  });
+  res.send(jobResults);
 });
 
 app.get("/braintrust.html", async (req, res) => {
-  res.render("braintrust.ejs", { jobs: await myPreferredJobResults() });
+  res.render("braintrust.ejs", await myPreferredJobResults());
+});
+
+app.get("/feeds", async (req, res) => {
+  const feedsResults = await getFeedsResults(Object.values(FEED_URLS));
+
+  textFirstJob(feedsResults.jobs, req.query.textToNumber);
+
+  res.send(feedsResults);
 });
 
 app.get("/feeds.html", async (req, res) => {
-  res.render("feeds.ejs", {
-    jobs: (await getFeedsResults(Object.values(FEED_URLS))).jobs,
-  });
+  res.render("feeds.ejs", await getFeedsResults(Object.values(FEED_URLS)));
 });
 
 app.get("/nodesk", async (req, res) => {
@@ -55,10 +56,6 @@ app.get("/nodesk", async (req, res) => {
 
 app.get("/weworkremotely", async (req, res) => {
   res.send(await getFeedsResults([FEED_URLS.WE_WORK_REMOTELY]));
-});
-
-app.get("/feeds", async (req, res) => {
-  res.send(await getFeedsResults(Object.values(FEED_URLS)));
 });
 
 const PORT = process.env.PORT || 8080;
