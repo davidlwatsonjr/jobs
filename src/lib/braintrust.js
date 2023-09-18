@@ -115,11 +115,7 @@ const myPreferredJobResults = async () => {
       )
   );
 
-  return {
-    count: jobs.length,
-    links: jobs.map((job) => job.full_link),
-    jobs,
-  };
+  return { jobs };
 };
 
 module.exports = {
