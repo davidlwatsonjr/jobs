@@ -58,6 +58,12 @@ app.get("/weworkremotely", async (req, res) => {
   res.send(await getFeedsResults([FEED_URLS.WE_WORK_REMOTELY]));
 });
 
+app.use((err, req, res, next) => {
+  const { message } = err;
+  console.error(`ERROR - ${message}`);
+  res.status(500).send(message);
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(
