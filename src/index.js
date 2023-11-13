@@ -5,6 +5,7 @@ const express = require("express");
 const { myPreferredJobResults } = require("./lib/braintrust");
 const { getFeedsResults } = require("./lib/feeds");
 const { textRandomJob, textFirstJob } = require("./lib/texter");
+const { emailAllJobs } = require("./lib/emailer");
 
 const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
@@ -30,6 +31,7 @@ app.get("/braintrust", async (req, res) => {
   const jobResults = await myPreferredJobResults();
 
   textRandomJob(jobResults.jobs, req.query.textToNumber);
+  emailAllJobs(jobResults.jobs, req.query.emailToAddress);
 
   res.send(jobResults);
 });
@@ -42,6 +44,7 @@ app.get("/feeds", async (req, res) => {
   const feedsResults = await getFeedsResults(Object.values(FEED_URLS));
 
   textFirstJob(feedsResults.jobs, req.query.textToNumber);
+  emailAllJobs(feedsResults.jobs, req.query.emailToAddress);
 
   res.send(feedsResults);
 });
