@@ -28,10 +28,13 @@ app.get("/ping", async (req, res) => {
 });
 
 app.get("/braintrust", async (req, res) => {
-  const jobResults = await myPreferredJobResults();
+  const { textToNumber, emailToAddress } = req.query;
 
-  textRandomJob(jobResults.jobs, req.query.textToNumber);
-  emailAllJobs(jobResults.jobs, req.query.emailToAddress);
+  const jobResults = await myPreferredJobResults();
+  const { jobs } = jobResults;
+
+  textRandomJob(jobs, textToNumber);
+  emailAllJobs(jobs, emailToAddress);
 
   res.send(jobResults);
 });
@@ -41,10 +44,13 @@ app.get("/braintrust.html", async (req, res) => {
 });
 
 app.get("/feeds", async (req, res) => {
-  const feedsResults = await getFeedsResults(Object.values(FEED_URLS));
+  const { textToNumber, emailToAddress } = req.query;
 
-  textFirstJob(feedsResults.jobs, req.query.textToNumber);
-  emailAllJobs(feedsResults.jobs, req.query.emailToAddress);
+  const feedsResults = await getFeedsResults(Object.values(FEED_URLS));
+  const { jobs } = feedsResults;
+
+  textFirstJob(jobs, textToNumber);
+  emailAllJobs(jobs, emailToAddress);
 
   res.send(feedsResults);
 });
