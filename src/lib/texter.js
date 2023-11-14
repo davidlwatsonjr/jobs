@@ -11,11 +11,13 @@ const sendText = async (body, to) => {
 
 const textFirstJob = async (jobs, toNumber) => {
   if (jobs.length > 0 && toNumber) {
-    console.log(`Texting first job out of ${jobs.length} to ${toNumber}.`);
+    const { full_link } = jobs[0];
 
-    const firstJobFullLink = jobs[0].full_link;
+    console.log(
+      `Texting first job (${full_link}) out of ${jobs.length} to ${toNumber}.`
+    );
     await sendText(
-      `${jobs.length} new jobs available. First: ${firstJobFullLink}`,
+      `${jobs.length} new jobs available. First: ${full_link}`,
       toNumber
     );
   }
@@ -23,12 +25,13 @@ const textFirstJob = async (jobs, toNumber) => {
 
 const textRandomJob = async (jobs, toNumber) => {
   if (jobs.length > 0 && toNumber) {
-    console.log(`Texting random job out of ${jobs.length} to ${toNumber}.`);
+    const { full_link } = jobs[Math.floor(Math.random() * jobs.length)];
 
-    const randomJobFullLink =
-      jobs[Math.floor(Math.random() * jobs.length)].full_link;
+    console.log(
+      `Texting random job (${full_link}) out of ${jobs.length} to ${toNumber}.`
+    );
     await sendText(
-      `${jobs.length} new jobs available. Random: ${randomJobFullLink}`,
+      `${jobs.length} new jobs available. Random: ${full_link}`,
       toNumber
     );
   }
