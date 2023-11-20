@@ -4,15 +4,10 @@ const path = require("path");
 const express = require("express");
 const { myPreferredJobResults } = require("./lib/braintrust");
 const { getFeedsResults } = require("./lib/feeds");
-const { textRandomJob, textFirstJob } = require("./lib/texter");
+const { textRandomJob } = require("./lib/texter");
 const { emailAllJobs } = require("./lib/emailer");
 const { sendText } = require("./lib/texter");
-const {
-  getFirstFile,
-  getFile,
-  uploadFile,
-  updateFile,
-} = require("./lib/storage");
+const { getFirstFile, uploadFile, updateFile } = require("./lib/storage");
 
 const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
