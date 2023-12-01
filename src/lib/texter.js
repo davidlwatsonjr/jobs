@@ -1,3 +1,5 @@
+const { filterForUntextedJobs, filterforNewJobs } = require("./jobscout");
+
 const { TEXTER_BASE_URL, TEXTER_API_KEY } = process.env;
 
 const sendText = async (body, to) => {
