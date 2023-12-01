@@ -37,8 +37,35 @@ const textRandomJob = async (jobs, toNumber) => {
   }
 };
 
+const textBestRandomJob = async (jobs, textToNumber) => {
+  if (!textToNumber) return;
+  const originalJobs = [...jobs];
+  const untextedJobs = filterForUntextedJobs(originalJobs);
+  const newUntextedJobs = filterforNewJobs(untextedJobs);
+  const textableJobs =
+    (newUntextedJobs.length && newUntextedJobs) ||
+    (untextedJobs.length && untextedJobs) ||
+    originalJobs;
+  const randomJob =
+    textableJobs[Math.floor(Math.random() * textableJobs.length)];
+  const { full_link } = randomJob;
+
+  console.log(
+    `Texting best (random, new, untexted) job out of ${originalJobs.length} to ${textToNumber}.`
+  );
+  await sendText(
+    `${jobs.length} new jobs available. Random: ${full_link}`,
+    textToNumber
+  );
+
+  const originalJob = originalJobs.find((job) => job.full_link === full_link);
+  originalJob.jobScoutHasTexted = true;
+  return originalJobs;
+};
+
 module.exports = {
   sendText,
   textFirstJob,
   textRandomJob,
+  textBestRandomJob,
 };
