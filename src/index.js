@@ -6,7 +6,6 @@ const { myPreferredJobResults } = require("./lib/braintrust");
 const {
   gcpLogTransformer,
   requestLogger,
-  authAPIRequest,
   serverErrorHandler,
 } = require("@davidlwatsonjr/microservice-middleware");
 const { getFeedsResults } = require("./lib/feeds");
