@@ -1,8 +1,7 @@
 const { getFeedsResults } = require("../lib/feeds");
 const { emailAllJobs } = require("../lib/emailer");
 const { textBestRandomJob } = require("../lib/texter");
-const { getFirstFile, uploadFile, updateFile } = require("../lib/storage");
-const { addJobScoutFlags } = require("../lib/jobscout");
+const { getFile, saveFile } = require("../lib/storage");
 
 const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
@@ -13,25 +12,20 @@ const FEED_URLS = {
 const feeds = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
-  const jobsStorageFilename = "jobscout.json";
-  const [knownFeedsFileResponse, { jobs }] = await Promise.all([
-    getFirstFile(`name='${jobsStorageFilename}'`),
+  const savedJobsFilename = "jobscout/feeds.json";
+  const [{ jobs }, knownJobsResponse] = await Promise.all([
     getFeedsResults(Object.values(FEED_URLS)),
+    getFile(savedJobsFilename),
   ]);
+  saveFile(savedJobsFilename, JSON.stringify(jobs));
 
-  emailAllJobs(jobs, emailToAddress);
+  const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
+  const unknownJobs = jobs.filter(
+    ({ id }) => !knownJobs.find((job) => job.id === id),
+  );
 
-  const knownJobs =
-    (knownFeedsFileResponse && JSON.parse(knownFeedsFileResponse.data)) || [];
-  const jobScoutJobs = addJobScoutFlags(jobs, knownJobs);
-
-  await textBestRandomJob(jobScoutJobs, textToNumber);
-
-  try {
-    updateFile(knownFeedsFileResponse.params.id, JSON.stringify(jobScoutJobs));
-  } catch (err) {
-    uploadFile(JSON.stringify(jobScoutJobs), jobsStorageFilename);
-  }
+  emailAllJobs(unknownJobs, emailToAddress);
+  textBestRandomJob(unknownJobs, textToNumber);
 
   res.send({ jobs });
 };

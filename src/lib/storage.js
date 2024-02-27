@@ -1,7 +1,8 @@
 const { STORAGE_BASE_URL, STORAGE_API_KEY } = process.env;
 
+const headers = { "x-api-key": STORAGE_API_KEY };
+
 const getFiles = async (q) => {
-  const headers = { "x-api-key": STORAGE_API_KEY };
   const query = new URLSearchParams({ q });
   const url = `${STORAGE_BASE_URL}/files?${query}`;
 
@@ -11,26 +12,21 @@ const getFiles = async (q) => {
 };
 
 const getFile = async (id) => {
-  const headers = { "x-api-key": STORAGE_API_KEY };
   const url = `${STORAGE_BASE_URL}/files/${id}`;
 
   console.log(`Getting file ${id} with ${url}`);
-  const response = await fetch(url, { headers });
-  return await response.json();
+  return await fetch(url, { headers });
 };
 
 const getFirstFile = async (q) => {
   const {
     data: { files },
   } = await getFiles(q);
-  return files && files[0] ? await getFile(files[0].id) : Promise.resolve(null);
+  return files?.[0] ? await getFile(files[0].id) : Promise.resolve(null);
 };
 
 const uploadFile = async (body, name) => {
-  const headers = {
-    "x-api-key": STORAGE_API_KEY,
-    "Content-Type": "application/json",
-  };
+  headers["Content-Type"] = "application/json";
   const url = `${STORAGE_BASE_URL}/files`;
   const fetchBody = JSON.stringify({ body, name });
 
@@ -44,10 +40,7 @@ const uploadFile = async (body, name) => {
 };
 
 const updateFile = async (id, body) => {
-  const headers = {
-    "x-api-key": STORAGE_API_KEY,
-    "Content-Type": "application/json",
-  };
+  headers["Content-Type"] = "application/json";
   const url = `${STORAGE_BASE_URL}/files/${id}`;
   const fetchBody = JSON.stringify({ body });
 
@@ -57,13 +50,15 @@ const updateFile = async (id, body) => {
     method: "PUT",
     body: fetchBody,
   });
-  return await response.json();
+  console.log(`Updated ${id}`);
+  return response;
 };
 
 module.exports = {
   getFiles,
   getFile,
   getFirstFile,
+  saveFile: updateFile,
   uploadFile,
   updateFile,
 };
