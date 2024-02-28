@@ -7,6 +7,7 @@ const {
   requestLogger,
   serverErrorHandler,
 } = require("@davidlwatsonjr/microservice-middleware");
+const { jobs } = require("./controllers/jobs");
 const { braintrust, braintrustHTML } = require("./controllers/braintrust");
 const {
   feeds,
@@ -26,6 +27,8 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/ping", async (req, res) => {
   res.send("pong");
 });
+
+app.get("/jobs", jobs);
 
 app.get("/braintrust", braintrust);
 app.get("/braintrust.html", braintrustHTML);

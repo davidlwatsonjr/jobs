@@ -21,7 +21,7 @@ const feeds = async (req, res) => {
 
   const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
   const unknownJobs = jobs.filter(
-    ({ id }) => !knownJobs.find((job) => job.id === id),
+    ({ full_link }) => !knownJobs.find((job) => job.full_link === full_link),
   );
 
   emailAllJobs(unknownJobs, emailToAddress);
