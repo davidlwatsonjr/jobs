@@ -13,28 +13,28 @@ const sendText = async (body, to) => {
 
 const textFirstJob = async (jobs, toNumber) => {
   if (jobs.length > 0 && toNumber) {
-    const { full_link } = jobs[0];
+    const { fullLink } = jobs[0];
 
     console.log(
-      `Texting first job (${full_link}) out of ${jobs.length} to ${toNumber}.`
+      `Texting first job (${fullLink}) out of ${jobs.length} to ${toNumber}.`,
     );
     await sendText(
-      `${jobs.length} new jobs available. First: ${full_link}`,
-      toNumber
+      `${jobs.length} new jobs available. First: ${fullLink}`,
+      toNumber,
     );
   }
 };
 
 const textRandomJob = async (jobs, toNumber) => {
   if (jobs.length > 0 && toNumber) {
-    const { full_link } = jobs[Math.floor(Math.random() * jobs.length)];
+    const { fullLink } = jobs[Math.floor(Math.random() * jobs.length)];
 
     console.log(
-      `Texting random job (${full_link}) out of ${jobs.length} to ${toNumber}.`
+      `Texting random job (${fullLink}) out of ${jobs.length} to ${toNumber}.`,
     );
     await sendText(
-      `${jobs.length} new jobs available. Random: ${full_link}`,
-      toNumber
+      `${jobs.length} new jobs available. Random: ${fullLink}`,
+      toNumber,
     );
   }
 };
@@ -50,17 +50,17 @@ const textBestRandomJob = async (jobs, textToNumber) => {
     originalJobs;
   const randomJob =
     textableJobs[Math.floor(Math.random() * textableJobs.length)];
-  const { full_link } = randomJob;
+  const { fullLink } = randomJob;
 
   console.log(
-    `Texting best (random, new, untexted) job out of ${originalJobs.length} to ${textToNumber}.`
+    `Texting best (random, new, untexted) job out of ${originalJobs.length} to ${textToNumber}.`,
   );
   await sendText(
-    `${jobs.length} new jobs available. Random: ${full_link}`,
-    textToNumber
+    `${jobs.length} new jobs available. Random: ${fullLink}`,
+    textToNumber,
   );
 
-  const originalJob = originalJobs.find((job) => job.full_link === full_link);
+  const originalJob = originalJobs.find((job) => job.fullLink === fullLink);
   originalJob.jobScoutHasTexted = true;
   return originalJobs;
 };

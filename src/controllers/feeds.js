@@ -20,7 +20,7 @@ const feeds = async (req, res) => {
 
   const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
   const unknownJobs = jobs.filter(
-    ({ full_link }) => !knownJobs.find((job) => job.full_link === full_link),
+    ({ fullLink }) => !knownJobs.find((job) => job.fullLink === fullLink),
   );
 
   if (emailToAddress) {

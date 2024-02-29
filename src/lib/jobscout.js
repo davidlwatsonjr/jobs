@@ -1,7 +1,7 @@
 const addJobScoutFlags = (jobs, knownJobs) => {
   return jobs.map((job) => {
     const knownJob = knownJobs.find(
-      (knownJob) => knownJob.full_link === job.full_link
+      (knownJob) => knownJob.fullLink === job.fullLink,
     );
     return {
       ...job,

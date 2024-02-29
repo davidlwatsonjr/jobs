@@ -16,7 +16,7 @@ const emailAllJobs = async (jobs, toEmailAddress) => {
     const subject = `${jobs.length} New Jobs Available`;
     const body = jobs
       .map((job) => {
-        return `<p><a href="${job.full_link}">${job.title} (${job.createdDate})</a></p>`;
+        return `<p><a href="${job.fullLink}">${job.title} (${job.createdDate})</a></p>`;
       })
       .join("");
 

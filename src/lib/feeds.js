@@ -8,7 +8,7 @@ const getFeedsResults = async (feedUrls) => {
   const jobs = feedResults
     .flatMap((feedResult) => feedResult.items)
     .map((job) => ({
-      full_link: job.link,
+      fullLink: job.link,
       createdDate: new Date(job.created).toLocaleDateString(),
       ...job,
     }));
