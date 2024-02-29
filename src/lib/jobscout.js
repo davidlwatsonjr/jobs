@@ -6,7 +6,7 @@ const addJobScoutFlags = (jobs, knownJobs) => {
     return {
       ...job,
       isNewToJobScout: !!knownJob,
-      jobScoutHasTexted: !!(knownJob && knownJob.jobScoutHasTexted),
+      jobScoutHasTexted: !!knownJob?.jobScoutHasTexted,
     };
   });
 };
