@@ -31,7 +31,7 @@ const fetchHeaders = {
 const getOpenApplications = async () => {
   const response = await fetch(
     `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?page_size=0&current=true`,
-    fetchHeaders
+    fetchHeaders,
   );
   return await response.json();
 };
@@ -39,7 +39,7 @@ const getOpenApplications = async () => {
 const getClosedApplications = async () => {
   const response = await fetch(
     `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?page_size=0&historical=true`,
-    fetchHeaders
+    fetchHeaders,
   );
   return await response.json();
 };
@@ -71,7 +71,7 @@ const searchOpenJobs = async (criteria) => {
     .join("&");
   const response = await fetch(
     `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
-    fetchHeaders
+    fetchHeaders,
   );
   const openJobs = await response.json();
   return openJobs.results.map((job) => ({
@@ -87,7 +87,7 @@ const getMatchingOpenEngineeringJobs = async () => {
     hourly_budget_minimum_usd: desiredHourlyBudgetMinimumUsd,
   });
   return openJobs.filter(
-    (job) => !undesiredSkillMatchLevels.includes(job.skills_match_level)
+    (job) => !undesiredSkillMatchLevels.includes(job.skills_match_level),
   );
 };
 
@@ -110,9 +110,9 @@ const myPreferredJobResults = async () => {
         undesiredEmployerNames.includes(job.employer.name) ||
         undesiredJobIds.includes(job.id) ||
         undesiredLocations.some((location) =>
-          job.locations.map(({ location }) => location).includes(location)
+          job.locations.map(({ location }) => location).includes(location),
         )
-      )
+      ),
   );
 
   return { jobs };

@@ -2,9 +2,9 @@ const { parse } = require("rss-to-json");
 
 const getFeedsResults = async (feedUrls) => {
   const feedResults = await Promise.all(
-    feedUrls.map((feedUrl) => parse(feedUrl))
+    feedUrls.map((feedUrl) => parse(feedUrl)),
   );
-  
+
   const jobs = feedResults
     .flatMap((feedResult) => feedResult.items)
     .map((job) => ({
