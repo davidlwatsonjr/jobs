@@ -11,14 +11,16 @@ const braintrust = async (req, res) => {
     myPreferredJobResults(),
     getFile(savedJobsFilename),
   ]);
-  saveFile(savedJobsFilename, JSON.stringify(jobs));
 
   const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
   const unknownJobs = jobs.filter(
     ({ full_link }) => !knownJobs.find((job) => job.full_link === full_link),
   );
 
-  emailAllJobs(unknownJobs, emailToAddress);
+  if (emailToAddress) {
+    emailAllJobs(unknownJobs, emailToAddress);
+    saveFile(savedJobsFilename, JSON.stringify(jobs));
+  }
   textRandomJob(unknownJobs, textToNumber);
 
   res.send({ jobs });
