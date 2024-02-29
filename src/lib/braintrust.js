@@ -65,7 +65,7 @@ const getNotHiredFeedback = async () => {
 };
 
 const searchOpenJobs = async (criteria) => {
-  const params = Object.assign({}, defaultJobSearchParams, criteria);
+  const params = { ...defaultJobSearchParams, ...criteria };
   const paramString = Object.entries(params)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
