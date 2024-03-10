@@ -43,6 +43,6 @@ app.use(serverErrorHandler);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(
-    `The job-scout container started successfully and is listening for HTTP requests on ${PORT}`,
+    `The jobs container started successfully and is listening for HTTP requests on ${PORT}`,
   );
 });

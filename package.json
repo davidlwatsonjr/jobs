@@ -1,11 +1,11 @@
 {
-  "name": "job-scout",
+  "name": "jobs",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "docker:build": "docker build -t job-scout .",
-    "docker:start": "docker run -p 8080:8080 job-scout",
+    "docker:build": "docker build -t jobs .",
+    "docker:start": "docker run -p 8080:8080 jobs",
     "eslint": "eslint",
     "format": "prettier --write \"src/**/*.js\"",
     "format:check": "prettier --check \"src/**/*.js\"",
