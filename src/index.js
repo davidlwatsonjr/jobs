@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
 const {
   gcpLogTransformer,
   requestLogger,
@@ -20,6 +21,10 @@ const app = express();
 
 app.use(gcpLogTransformer);
 app.use(requestLogger);
+
+app.use(
+  cors({ origin: [/[a-z]+\.davidlwatsonjr\.com/, "http://localhost:3000"] }),
+);
 
 app.use(express.static("src/public"));
 app.set("views", path.join(__dirname, "views"));
