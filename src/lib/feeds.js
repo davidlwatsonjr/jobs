@@ -1,5 +1,5 @@
 const { parse } = require("rss-to-json");
-const md5 = require("../util/md5");
+const { md5 } = require("../util/md5");
 
 const getFeedsResults = async (feedUrls) => {
   const feedResults = await Promise.all(
