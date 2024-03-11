@@ -12,7 +12,7 @@ const FEED_URLS = {
 const feeds = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
-  const savedJobsFilename = "jobscout/feeds.json";
+  const savedJobsFilename = "jobs/feeds.json";
   const [{ jobs }, knownJobsResponse] = await Promise.all([
     getFeedsResults(Object.values(FEED_URLS)),
     getFile(savedJobsFilename),

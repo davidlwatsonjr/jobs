@@ -13,7 +13,7 @@ const FEED_URLS = {
 const jobs = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
-  const savedJobsFilename = "jobscout/jobs.json";
+  const savedJobsFilename = "jobs/jobs.json";
   const [{ jobs: braintrustJobs }, { jobs: feedsJobs }, knownJobsResponse] =
     await Promise.all([
       myPreferredJobResults(),

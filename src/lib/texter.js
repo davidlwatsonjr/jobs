@@ -1,4 +1,4 @@
-const { filterForUntextedJobs, filterforNewJobs } = require("./jobscout");
+const { filterForUntextedJobs, filterforNewJobs } = require("./jobs");
 
 const { TEXTER_BASE_URL, TEXTER_API_KEY } = process.env;
 
@@ -61,7 +61,7 @@ const textBestRandomJob = async (jobs, textToNumber) => {
   );
 
   const originalJob = originalJobs.find((job) => job.fullLink === fullLink);
-  originalJob.jobScoutHasTexted = true;
+  originalJob.jobsHasTexted = true;
   return originalJobs;
 };
 

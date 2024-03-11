@@ -6,7 +6,7 @@ const { getFile, saveFile } = require("../lib/storage");
 const braintrust = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
-  const savedJobsFilename = "jobscout/braintrust.json";
+  const savedJobsFilename = "jobs/braintrust.json";
   const [{ jobs }, knownJobsResponse] = await Promise.all([
     myPreferredJobResults(),
     getFile(savedJobsFilename),
