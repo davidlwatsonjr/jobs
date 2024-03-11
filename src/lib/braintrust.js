@@ -1,3 +1,5 @@
+const { md5 } = require("../util/md5");
+
 const {
   BRAINTRUST_SESSION_ID,
   BRAINTRUST_API_BASE_URL,
@@ -76,6 +78,7 @@ const searchOpenJobs = async (criteria) => {
   const openJobs = await response.json();
   return openJobs.results.map((job) => ({
     fullLink: `https://app.usebraintrust.com/jobs/${job.id}`,
+    fullLinkMD5: md5(`https://app.usebraintrust.com/jobs/${job.id}`),
     createdDate: new Date(job.created).toLocaleDateString(),
     ...job,
   }));
