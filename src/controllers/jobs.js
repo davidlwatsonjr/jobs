@@ -14,25 +14,31 @@ const jobs = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
   const savedJobsFilename = "jobs/jobs.json";
-  const [{ jobs: braintrustJobs }, { jobs: feedsJobs }, knownJobsResponse] =
+  const [{ jobs: braintrustJobs }, { jobs: feedsJobs }, savedJobsResponse] =
     await Promise.all([
       myPreferredJobResults(),
       getFeedsResults(Object.values(FEED_URLS)),
       getFile(savedJobsFilename),
     ]);
-  const jobs = [...braintrustJobs, ...feedsJobs];
-  jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+  const currentJobs = [...braintrustJobs, ...feedsJobs];
+  const savedJobs = savedJobsResponse.ok ? await savedJobsResponse.json() : [];
 
-  const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
-  const unknownJobs = jobs.filter(
-    ({ fullLink }) => !knownJobs.find((job) => job.fullLink === fullLink),
+  const newCurrentJobs = currentJobs.filter(
+    ({ fullLink }) => !savedJobs.find((job) => job.fullLink === fullLink),
   );
 
+  const savedCurrentJobs = savedJobs.filter(({ fullLink }) =>
+    currentJobs.find((job) => job.fullLink === fullLink),
+  );
+
+  const jobs = [...newCurrentJobs, ...savedCurrentJobs];
+  jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
   if (emailToAddress) {
-    emailAllJobs(unknownJobs, emailToAddress);
+    emailAllJobs(newCurrentJobs, emailToAddress);
     saveFile(savedJobsFilename, JSON.stringify(jobs));
   }
-  textRandomJob(unknownJobs, textToNumber);
+  textRandomJob(newCurrentJobs, textToNumber);
 
   res.send({ jobs });
 };
