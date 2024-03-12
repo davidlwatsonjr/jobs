@@ -1,5 +1,5 @@
 const { getFeedsResults } = require("../lib/feeds");
-const { emailAllJobs } = require("../lib/emailer");
+const { emailUnemailedJobs } = require("../lib/emailer");
 const { textBestRandomJob } = require("../lib/texter");
 const { getFile, saveFile } = require("../lib/storage");
 
@@ -24,7 +24,7 @@ const feeds = async (req, res) => {
   );
 
   if (emailToAddress) {
-    emailAllJobs(unknownJobs, emailToAddress);
+    emailUnemailedJobs(unknownJobs, emailToAddress);
     saveFile(savedJobsFilename, JSON.stringify(jobs));
   }
   textBestRandomJob(unknownJobs, textToNumber);

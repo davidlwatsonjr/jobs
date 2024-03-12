@@ -9,19 +9,24 @@ const sendEmail = async (body, subject, to) => {
   return await fetch(url, { headers });
 };
 
-const emailAllJobs = async (jobs, toEmailAddress) => {
-  if (jobs.length > 0 && toEmailAddress) {
-    console.log(`Emailing ${jobs.length} jobs to ${toEmailAddress}.`);
+const emailUnemailedJobs = async (jobs, toEmailAddress) => {
+  const unemailedJobs = jobs.filter((job) => !job.emailed);
+  if (unemailedJobs.length > 0 && toEmailAddress) {
+    console.log(`Emailing ${unemailedJobs.length} jobs to ${toEmailAddress}.`);
 
-    const subject = `${jobs.length} New Jobs Available`;
-    const body = jobs
+    const subject = `${unemailedJobs.length} New Jobs Available`;
+    const body = unemailedJobs
       .map((job) => {
         return `<p><a href="${job.fullLink}">${job.title} (${job.createdDate})</a></p>`;
       })
       .join("");
 
+    for (const job of unemailedJobs) {
+      job.emailed = true;
+    }
+
     await sendEmail(body, subject, toEmailAddress);
   }
 };
 
-module.exports = { sendEmail, emailAllJobs };
+module.exports = { sendEmail, emailUnemailedJobs };

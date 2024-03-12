@@ -1,5 +1,5 @@
 const { myPreferredJobResults } = require("../lib/braintrust");
-const { emailAllJobs } = require("../lib/emailer");
+const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFeedsResults } = require("../lib/feeds");
 const { getFile, saveFile } = require("../lib/storage");
@@ -40,12 +40,10 @@ const getJobs = async (req, res) => {
   const jobs = [...newCurrentJobs, ...savedCurrentJobs];
   jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
 
-  if (emailToAddress) {
-    emailAllJobs(newCurrentJobs, emailToAddress);
-    saveFile(savedJobsFilename, JSON.stringify(jobs));
-  }
+  emailUnemailedJobs(jobs, emailToAddress);
   textRandomJob(newCurrentJobs, textToNumber);
 
+  saveFile(savedJobsFilename, JSON.stringify(jobs));
   res.send({ jobs });
 };
 

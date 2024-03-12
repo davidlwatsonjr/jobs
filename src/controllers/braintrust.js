@@ -1,5 +1,5 @@
 const { myPreferredJobResults } = require("../lib/braintrust");
-const { emailAllJobs } = require("../lib/emailer");
+const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFile, saveFile } = require("../lib/storage");
 
@@ -18,7 +18,7 @@ const braintrust = async (req, res) => {
   );
 
   if (emailToAddress) {
-    emailAllJobs(unknownJobs, emailToAddress);
+    emailUnemailedJobs(unknownJobs, emailToAddress);
     saveFile(savedJobsFilename, JSON.stringify(jobs));
   }
   textRandomJob(unknownJobs, textToNumber);
