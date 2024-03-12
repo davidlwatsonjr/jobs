@@ -32,10 +32,6 @@ const feeds = async (req, res) => {
   res.send({ jobs });
 };
 
-const feedsHTML = async (req, res) => {
-  res.render("feeds.ejs", await getFeedsResults(Object.values(FEED_URLS)));
-};
-
 const nodesk = async (req, res) => {
   res.send(await getFeedsResults([FEED_URLS.NO_DESK]));
 };
@@ -46,7 +42,6 @@ const weworkremotely = async (req, res) => {
 
 module.exports = {
   feeds,
-  feedsHTML,
   nodesk,
   weworkremotely,
 };

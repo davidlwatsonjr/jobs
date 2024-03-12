@@ -26,11 +26,6 @@ const braintrust = async (req, res) => {
   res.send({ jobs });
 };
 
-const braintrustHTML = async (req, res) => {
-  res.render("braintrust.ejs", await myPreferredJobResults());
-};
-
 module.exports = {
   braintrust,
-  braintrustHTML,
 };
