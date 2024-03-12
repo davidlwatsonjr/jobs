@@ -10,10 +10,11 @@ const FEED_URLS = {
     "https://weworkremotely.com/categories/remote-programming-jobs.rss",
 };
 
-const jobs = async (req, res) => {
+const savedJobsFilename = "jobs/jobs.json";
+
+const getJobs = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
-  const savedJobsFilename = "jobs/jobs.json";
   const [{ jobs: braintrustJobs }, { jobs: feedsJobs }, savedJobsResponse] =
     await Promise.all([
       myPreferredJobResults(),
@@ -43,6 +44,24 @@ const jobs = async (req, res) => {
   res.send({ jobs });
 };
 
+const putJob = async (req, res) => {
+  const { fullLinkMD5 } = req.params;
+  const { body } = req;
+
+  const savedJobsResponse = await getFile(savedJobsFilename);
+  const savedJobs = savedJobsResponse.ok ? await savedJobsResponse.json() : [];
+
+  const job = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
+  if (!job) {
+    res.status(404).send({ error: "Job not found." });
+  }
+
+  Object.assign(job, body);
+  await saveFile(savedJobsFilename, JSON.stringify(savedJobs));
+  res.send({ job });
+};
+
 module.exports = {
-  jobs,
+  getJobs,
+  putJob,
 };

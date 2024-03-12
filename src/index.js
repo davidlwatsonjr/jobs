@@ -7,8 +7,9 @@ const {
   gcpLogTransformer,
   requestLogger,
   serverErrorHandler,
+  authAPIRequest,
 } = require("@davidlwatsonjr/microservice-middleware");
-const { jobs } = require("./controllers/jobs");
+const { getJobs, putJob } = require("./controllers/jobs");
 const { braintrust, braintrustHTML } = require("./controllers/braintrust");
 const {
   feeds,
@@ -33,7 +34,8 @@ app.get("/ping", async (req, res) => {
   res.send("pong");
 });
 
-app.get("/jobs", jobs);
+app.get("/jobs", getJobs);
+app.put("/jobs/:fullLinkMD5", authAPIRequest, express.json(), putJob);
 
 app.get("/braintrust", braintrust);
 app.get("/braintrust.html", braintrustHTML);
