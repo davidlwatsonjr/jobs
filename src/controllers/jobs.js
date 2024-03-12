@@ -54,6 +54,7 @@ const putJob = async (req, res) => {
   const job = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
   if (!job) {
     res.status(404).send({ error: "Job not found." });
+    return;
   }
 
   Object.assign(job, body);
