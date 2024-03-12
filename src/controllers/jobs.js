@@ -16,7 +16,7 @@ const defaultSavedJobsFilename = "jobs/jobs.json";
 const getJobs = async (req, res) => {
   const userUUID = req.headers["x-useruuid"];
   const savedJobsFilename = isUUID(userUUID)
-    ? `jobs/${userUUID}.json`
+    ? `jobs/by-user-uuid/${userUUID}.json`
     : defaultSavedJobsFilename;
   const { textToNumber, emailToAddress } = req.query;
 
@@ -52,7 +52,7 @@ const getJobs = async (req, res) => {
 const putJob = async (req, res) => {
   const userUUID = req.headers["x-useruuid"];
   const savedJobsFilename = isUUID(userUUID)
-    ? `jobs/${userUUID}.json`
+    ? `jobs/by-user-uuid/${userUUID}.json`
     : defaultSavedJobsFilename;
   const { fullLinkMD5 } = req.params;
   const { body } = req;
