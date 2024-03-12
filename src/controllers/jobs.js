@@ -3,6 +3,7 @@ const { emailAllJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFeedsResults } = require("../lib/feeds");
 const { getFile, saveFile } = require("../lib/storage");
+const { isUUID } = require("../util/isUUID");
 
 const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
@@ -10,9 +11,13 @@ const FEED_URLS = {
     "https://weworkremotely.com/categories/remote-programming-jobs.rss",
 };
 
-const savedJobsFilename = "jobs/jobs.json";
+const defaultSavedJobsFilename = "jobs/jobs.json";
 
 const getJobs = async (req, res) => {
+  const userUUID = req.headers["x-useruuid"];
+  const savedJobsFilename = isUUID(userUUID)
+    ? `jobs/${userUUID}.json`
+    : defaultSavedJobsFilename;
   const { textToNumber, emailToAddress } = req.query;
 
   const [{ jobs: braintrustJobs }, { jobs: feedsJobs }, savedJobsResponse] =
@@ -45,6 +50,10 @@ const getJobs = async (req, res) => {
 };
 
 const putJob = async (req, res) => {
+  const userUUID = req.headers["x-useruuid"];
+  const savedJobsFilename = isUUID(userUUID)
+    ? `jobs/${userUUID}.json`
+    : defaultSavedJobsFilename;
   const { fullLinkMD5 } = req.params;
   const { body } = req;
 

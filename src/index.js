@@ -17,6 +17,7 @@ const {
   nodesk,
   weworkremotely,
 } = require("./controllers/feeds");
+const { isUUID } = require("./util/isUUID");
 
 const app = express();
 
@@ -34,8 +35,12 @@ app.get("/ping", async (req, res) => {
   res.send("pong");
 });
 
+const useUserUUIDOrAPIKey = (req, res, next) => {
+  isUUID(req.headers["x-useruuid"]) ? next() : authAPIRequest(req, res, next);
+};
+
 app.get("/jobs", getJobs);
-app.put("/jobs/:fullLinkMD5", authAPIRequest, express.json(), putJob);
+app.put("/jobs/:fullLinkMD5", useUserUUIDOrAPIKey, express.json(), putJob);
 
 app.get("/braintrust", braintrust);
 app.get("/braintrust.html", braintrustHTML);
