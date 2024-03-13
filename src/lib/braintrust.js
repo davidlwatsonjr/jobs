@@ -26,24 +26,31 @@ const defaultJobSearchParams = {
   page_size: 100,
 };
 
-const fetchHeaders = {
+const fetchOptions = {
   headers: { cookie: `sessionid=${BRAINTRUST_SESSION_ID}` },
 };
 
+const makeApplicationsRequest = async (paramString) => {
+  try {
+    const response = await fetch(
+      `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?${paramString}`,
+      fetchOptions,
+    );
+    return await response.json();
+  } catch (error) {
+    console.error(
+      `ERROR making Braintrust /freelancer_bids request: ${error.message}`,
+    );
+    return [];
+  }
+};
+
 const getOpenApplications = async () => {
-  const response = await fetch(
-    `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?page_size=0&current=true`,
-    fetchHeaders,
-  );
-  return await response.json();
+  return await makeApplicationsRequest("page_size=0&current=true");
 };
 
 const getClosedApplications = async () => {
-  const response = await fetch(
-    `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?page_size=0&historical=true`,
-    fetchHeaders,
-  );
-  return await response.json();
+  return await makeApplicationsRequest("page_size=0&historical=true");
 };
 
 const getAllApplications = async () => {
@@ -66,16 +73,25 @@ const getNotHiredFeedback = async () => {
     }));
 };
 
+const makeJobsRequest = async (paramString) => {
+  try {
+    const response = await fetch(
+      `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
+      fetchOptions,
+    );
+    return await response.json();
+  } catch (error) {
+    console.error(`ERROR making Braintrust /jobs request: ${error.message}`);
+    return { results: [] };
+  }
+};
+
 const searchOpenJobs = async (criteria) => {
   const params = { ...defaultJobSearchParams, ...criteria };
   const paramString = Object.entries(params)
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  const response = await fetch(
-    `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
-    fetchHeaders,
-  );
-  const openJobs = await response.json();
+  const openJobs = await makeJobsRequest(paramString);
   return openJobs.results.map((job) => ({
     fullLink: `https://app.usebraintrust.com/jobs/${job.id}`,
     fullLinkMD5: md5(`https://app.usebraintrust.com/jobs/${job.id}`),
