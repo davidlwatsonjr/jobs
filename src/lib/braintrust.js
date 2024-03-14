@@ -100,7 +100,15 @@ const getMatchingOpenEngineeringJobs = async () => {
     hourly_budget_minimum_usd: desiredHourlyBudgetMinimumUsd,
   });
   return openJobs.filter(
-    (job) => !undesiredSkillMatchLevels.includes(job.skills_match_level),
+    (job) =>
+      !(
+        undesiredSkillMatchLevels.includes(job.skills_match_level) ||
+        undesiredEmployerNames.includes(job.employer.name) ||
+        undesiredJobIds.includes(job.id) ||
+        undesiredLocations.some((location) =>
+          job.locations.map(({ location }) => location).includes(location),
+        )
+      ),
   );
 };
 
@@ -113,24 +121,14 @@ const getUnappliedMatchingOpenEngineeringJobs = async () => {
   return jobs.filter((job) => !appliedJobIds.includes(job.id));
 };
 
+const myPreferredJobResults = async () => {
+  const jobs = await getUnappliedMatchingOpenEngineeringJobs();
+  return { jobs };
+};
+
 const getBraintrustMatchLevels = async () => {
   const openJobs = await searchOpenJobs();
   return Array.from(new Set(openJobs.map((job) => job.skills_match_level)));
-};
-
-const myPreferredJobResults = async () => {
-  const jobs = (await getUnappliedMatchingOpenEngineeringJobs()).filter(
-    (job) =>
-      !(
-        undesiredEmployerNames.includes(job.employer.name) ||
-        undesiredJobIds.includes(job.id) ||
-        undesiredLocations.some((location) =>
-          job.locations.map(({ location }) => location).includes(location),
-        )
-      ),
-  );
-
-  return { jobs };
 };
 
 module.exports = {
