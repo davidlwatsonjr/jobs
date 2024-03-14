@@ -18,15 +18,13 @@ const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split("|");
 const undesiredLocations = UNDESIRED_LOCATIONS.split("|");
 const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split("|");
 
-const fetchOptions = {
-  headers: { cookie: `sessionid=${BRAINTRUST_SESSION_ID}` },
-};
+const makeApplicationsRequest = async (criteria) => {
+  const paramString = new URLSearchParams(criteria);
 
-const makeApplicationsRequest = async (paramString) => {
   try {
     const response = await fetch(
       `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?${paramString}`,
-      fetchOptions,
+      { headers: { cookie: `sessionid=${BRAINTRUST_SESSION_ID}` } },
     );
 
     const results = await response.json();
@@ -44,11 +42,11 @@ const makeApplicationsRequest = async (paramString) => {
 };
 
 const getOpenApplications = async () => {
-  return await makeApplicationsRequest("page_size=0&current=true");
+  return await makeApplicationsRequest({ page_size: 0, current: true });
 };
 
 const getClosedApplications = async () => {
-  return await makeApplicationsRequest("page_size=0&historical=true");
+  return await makeApplicationsRequest({ page_size: 0, historical: true });
 };
 
 const getAllApplications = async () => {
