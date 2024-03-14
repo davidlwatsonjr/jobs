@@ -12,11 +12,13 @@ const {
 
 const ENGINEERING_ROLE_ID = 5;
 
-const desiredHourlyBudgetMinimumUsd = Number(DESIRED_HOURLY_BUDGET_MINIMUM_USD);
-const undesiredJobIds = UNDESIRED_JOB_IDS.split("|").map(Number);
-const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split("|");
-const undesiredLocations = UNDESIRED_LOCATIONS.split("|");
-const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split("|");
+const desiredHourlyBudgetMinimumUsd =
+  Number(DESIRED_HOURLY_BUDGET_MINIMUM_USD) || 0;
+const undesiredJobIds = UNDESIRED_JOB_IDS?.split("|").map(Number) || [];
+const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES?.split("|") || [];
+const undesiredLocations = UNDESIRED_LOCATIONS?.split("|") || [];
+const undesiredSkillMatchLevels =
+  UNDESIRED_SKILL_MATCH_LEVELS?.split("|") || [];
 
 const makeApplicationsRequest = async (criteria = {}) => {
   const paramString = new URLSearchParams(criteria);
