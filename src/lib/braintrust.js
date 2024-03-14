@@ -121,11 +121,6 @@ const getUnappliedMatchingOpenEngineeringJobs = async () => {
   return jobs.filter((job) => !appliedJobIds.includes(job.id));
 };
 
-const myPreferredJobResults = async () => {
-  const jobs = await getUnappliedMatchingOpenEngineeringJobs();
-  return { jobs };
-};
-
 const getBraintrustMatchLevels = async () => {
   const openJobs = await searchOpenJobs();
   return Array.from(new Set(openJobs.map((job) => job.skills_match_level)));
@@ -134,5 +129,5 @@ const getBraintrustMatchLevels = async () => {
 module.exports = {
   getAllApplications,
   getOpenEngineeringJobs,
-  myPreferredJobResults,
+  getUnappliedMatchingOpenEngineeringJobs,
 };

@@ -1,4 +1,7 @@
-const { myPreferredJobResults, getAllApplications } = require("../lib/braintrust");
+const {
+  getUnappliedMatchingOpenEngineeringJobs,
+  getAllApplications,
+} = require("../lib/braintrust");
 const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFile, saveFile } = require("../lib/storage");
@@ -7,8 +10,8 @@ const braintrust = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
   const savedJobsFilename = "jobs/braintrust.json";
-  const [{ jobs }, knownJobsResponse] = await Promise.all([
-    myPreferredJobResults(),
+  const [jobs, knownJobsResponse] = await Promise.all([
+    getUnappliedMatchingOpenEngineeringJobs(),
     getFile(savedJobsFilename),
   ]);
 
