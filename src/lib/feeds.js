@@ -15,8 +15,6 @@ const getFeedsResults = async (feedUrls) => {
       ...job,
     }));
 
-  jobs.sort((a, b) => b.created - a.created);
-
   return { jobs };
 };
 

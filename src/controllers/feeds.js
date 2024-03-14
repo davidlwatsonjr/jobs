@@ -18,6 +18,8 @@ const feeds = async (req, res) => {
     getFile(savedJobsFilename),
   ]);
 
+  jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
   const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
   const unknownJobs = jobs.filter(
     ({ fullLink }) => !knownJobs.find((job) => job.fullLink === fullLink),
