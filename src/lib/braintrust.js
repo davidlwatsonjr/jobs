@@ -83,7 +83,6 @@ const makeJobsRequest = async (paramString) => {
   try {
     const response = await fetch(
       `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
-      fetchOptions,
     );
     return await response.json();
   } catch (error) {
