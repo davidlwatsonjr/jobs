@@ -144,5 +144,6 @@ const myPreferredJobResults = async () => {
 };
 
 module.exports = {
+  getMatchingOpenEngineeringJobs,
   myPreferredJobResults,
 };
