@@ -36,7 +36,13 @@ const makeApplicationsRequest = async (paramString) => {
       `${BRAINTRUST_API_BASE_URL}/freelancer_bids/?${paramString}`,
       fetchOptions,
     );
-    return await response.json();
+
+    const results = await response.json();
+    if (!Array.isArray(results)) {
+      throw new Error(JSON.stringify(results));
+    }
+
+    return results;
   } catch (error) {
     console.error(
       `ERROR making Braintrust /freelancer_bids request: ${error.message}`,
