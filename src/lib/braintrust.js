@@ -1,7 +1,6 @@
 const { md5 } = require("../util/md5");
 
 const {
-  BRAINTRUST_API_BASE_URL,
   BRAINTRUST_SESSION_ID,
   DESIRED_HOURLY_BUDGET_MINIMUM_USD,
   UNDESIRED_JOB_IDS,
@@ -9,6 +8,8 @@ const {
   UNDESIRED_LOCATIONS,
   UNDESIRED_SKILL_MATCH_LEVELS,
 } = process.env;
+
+const BRAINTRUST_API_BASE_URL = "https://app.usebraintrust.com/api";
 
 const ENGINEERING_ROLE_ID = 5;
 
