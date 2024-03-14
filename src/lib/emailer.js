@@ -1,6 +1,15 @@
 const { EMAILER_BASE_URL, EMAILER_API_KEY } = process.env;
 
+if (!EMAILER_BASE_URL || !EMAILER_API_KEY) {
+  console.warn(
+    "EMAILER_BASE_URL and EMAILER_API_KEY environment variables need to be set for emailer to work.",
+  );
+}
+
 const sendEmail = async (body, subject, to) => {
+  if (!EMAILER_BASE_URL || !EMAILER_API_KEY) {
+    return null;
+  }
   const query = new URLSearchParams({ to, subject, body });
   const url = `${EMAILER_BASE_URL}/send?${query}`;
   const headers = { "x-api-key": EMAILER_API_KEY };
