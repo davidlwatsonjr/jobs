@@ -18,7 +18,7 @@ const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split("|");
 const undesiredLocations = UNDESIRED_LOCATIONS.split("|");
 const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split("|");
 
-const makeApplicationsRequest = async (criteria) => {
+const makeApplicationsRequest = async (criteria = {}) => {
   const paramString = new URLSearchParams(criteria);
 
   try {
@@ -69,7 +69,7 @@ const getNotHiredFeedback = async () => {
     }));
 };
 
-const makeJobsRequest = async (criteria) => {
+const makeJobsRequest = async (criteria = {}) => {
   const paramString = new URLSearchParams({
     page: 1,
     ordering: "-created",
@@ -90,7 +90,7 @@ const makeJobsRequest = async (criteria) => {
   }
 };
 
-const searchOpenJobs = async (criteria) => {
+const searchOpenJobs = async (criteria = {}) => {
   const openJobs = await makeJobsRequest(criteria);
   return openJobs.results.map((job) => ({
     fullLink: `https://app.usebraintrust.com/jobs/${job.id}`,
@@ -98,6 +98,10 @@ const searchOpenJobs = async (criteria) => {
     createdDate: new Date(job.created).toLocaleDateString(),
     ...job,
   }));
+};
+
+const getOpenEngineeringJobs = async () => {
+  return await searchOpenJobs({ role: ENGINEERING_ROLE_ID });
 };
 
 const getMatchingOpenEngineeringJobs = async () => {
@@ -138,6 +142,6 @@ const myPreferredJobResults = async () => {
 };
 
 module.exports = {
-  getMatchingOpenEngineeringJobs,
+  getOpenEngineeringJobs,
   myPreferredJobResults,
 };

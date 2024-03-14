@@ -1,4 +1,4 @@
-const { getMatchingOpenEngineeringJobs } = require("../lib/braintrust");
+const { getOpenEngineeringJobs } = require("../lib/braintrust");
 const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFeedsResults } = require("../lib/feeds");
@@ -22,7 +22,7 @@ const getJobs = async (req, res) => {
 
   const [braintrustJobs, { jobs: feedsJobs }, savedJobsResponse] =
     await Promise.all([
-      getMatchingOpenEngineeringJobs(),
+      getOpenEngineeringJobs(),
       getFeedsResults(Object.values(FEED_URLS)),
       getFile(savedJobsFilename),
     ]);
