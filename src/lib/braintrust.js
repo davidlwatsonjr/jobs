@@ -52,11 +52,9 @@ const getClosedApplications = async () => {
 };
 
 const getAllApplications = async () => {
-  const [openApplications, closedApplications] = await Promise.all([
-    getOpenApplications(),
-    getClosedApplications(),
-  ]);
-  return [...openApplications, ...closedApplications];
+  return (
+    await Promise.all([getOpenApplications(), getClosedApplications()])
+  ).flat();
 };
 
 const makeJobsRequest = async (criteria = {}) => {
