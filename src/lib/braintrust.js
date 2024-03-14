@@ -18,14 +18,6 @@ const undesiredEmployerNames = UNDESIRED_EMPLOYER_NAMES.split("|");
 const undesiredLocations = UNDESIRED_LOCATIONS.split("|");
 const undesiredSkillMatchLevels = UNDESIRED_SKILL_MATCH_LEVELS.split("|");
 
-const defaultJobSearchParams = {
-  page: 1,
-  ordering: "-created",
-  availability_from: 5,
-  availability_to: 40,
-  page_size: 100,
-};
-
 const fetchOptions = {
   headers: { cookie: `sessionid=${BRAINTRUST_SESSION_ID}` },
 };
@@ -79,7 +71,16 @@ const getNotHiredFeedback = async () => {
     }));
 };
 
-const makeJobsRequest = async (paramString) => {
+const makeJobsRequest = async (criteria) => {
+  const paramString = new URLSearchParams({
+    page: 1,
+    ordering: "-created",
+    availability_from: 5,
+    availability_to: 40,
+    page_size: 100,
+    ...criteria,
+  });
+
   try {
     const response = await fetch(
       `${BRAINTRUST_API_BASE_URL}/jobs/?${paramString}`,
@@ -92,11 +93,7 @@ const makeJobsRequest = async (paramString) => {
 };
 
 const searchOpenJobs = async (criteria) => {
-  const params = { ...defaultJobSearchParams, ...criteria };
-  const paramString = Object.entries(params)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
-  const openJobs = await makeJobsRequest(paramString);
+  const openJobs = await makeJobsRequest(criteria);
   return openJobs.results.map((job) => ({
     fullLink: `https://app.usebraintrust.com/jobs/${job.id}`,
     fullLinkMD5: md5(`https://app.usebraintrust.com/jobs/${job.id}`),
