@@ -105,8 +105,10 @@ const getMatchingOpenEngineeringJobs = async () => {
 };
 
 const getUnappliedMatchingOpenEngineeringJobs = async () => {
-  const jobs = await getMatchingOpenEngineeringJobs();
-  const applications = await getAllApplications();
+  const [jobs, applications] = await Promise.all([
+    getMatchingOpenEngineeringJobs(),
+    getAllApplications(),
+  ]);
   const appliedJobIds = applications.map((application) => application.job.id);
   return jobs.filter((job) => !appliedJobIds.includes(job.id));
 };
