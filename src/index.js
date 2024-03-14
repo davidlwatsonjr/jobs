@@ -9,7 +9,10 @@ const {
   authAPIRequest,
 } = require("@davidlwatsonjr/microservice-middleware");
 const { getJobs, putJob } = require("./controllers/jobs");
-const { braintrust } = require("./controllers/braintrust");
+const {
+  braintrust,
+  braintrustApplications,
+} = require("./controllers/braintrust");
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
 
@@ -34,6 +37,7 @@ app.get("/jobs", getJobs);
 app.put("/jobs/:fullLinkMD5", useUserUUIDOrAPIKey, express.json(), putJob);
 
 app.get("/braintrust", braintrust);
+app.get("/braintrust/applications", braintrustApplications);
 
 app.get("/feeds", feeds);
 app.get("/nodesk", nodesk);

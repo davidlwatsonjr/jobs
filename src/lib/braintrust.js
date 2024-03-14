@@ -57,18 +57,6 @@ const getAllApplications = async () => {
   return [...openApplications, ...closedApplications];
 };
 
-const getNotHiredFeedback = async () => {
-  const applications = await getAllApplications();
-  return applications
-    .filter((application) => application.not_hiring_feedback.length > 0)
-    .map((application) => ({
-      jobTitle: application.job.title,
-      employer: application.job.employer.name,
-      rateRequested: application.payment_amount,
-      notHiredFeedback: application.not_hiring_feedback,
-    }));
-};
-
 const makeJobsRequest = async (criteria = {}) => {
   const paramString = new URLSearchParams({
     page: 1,
@@ -142,6 +130,7 @@ const myPreferredJobResults = async () => {
 };
 
 module.exports = {
+  getAllApplications,
   getOpenEngineeringJobs,
   myPreferredJobResults,
 };

@@ -1,4 +1,4 @@
-const { myPreferredJobResults } = require("../lib/braintrust");
+const { myPreferredJobResults, getAllApplications } = require("../lib/braintrust");
 const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFile, saveFile } = require("../lib/storage");
@@ -26,6 +26,12 @@ const braintrust = async (req, res) => {
   res.send({ jobs });
 };
 
+const braintrustApplications = async (req, res) => {
+  const applications = await getAllApplications();
+  res.send({ applications });
+};
+
 module.exports = {
   braintrust,
+  braintrustApplications,
 };
