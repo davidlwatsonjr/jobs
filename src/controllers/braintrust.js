@@ -15,7 +15,7 @@ const braintrust = async (req, res) => {
     getFile(savedJobsFilename),
   ]);
 
-  const knownJobs = knownJobsResponse.ok ? await knownJobsResponse.json() : [];
+  const knownJobs = knownJobsResponse?.ok ? await knownJobsResponse.json() : [];
   const unknownJobs = jobs.filter(
     ({ fullLink }) => !knownJobs.find((job) => job.fullLink === fullLink),
   );

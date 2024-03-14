@@ -27,7 +27,7 @@ const getJobs = async (req, res) => {
       getFile(savedJobsFilename),
     ]);
   const currentJobs = [...braintrustJobs, ...feedsJobs];
-  const savedJobs = savedJobsResponse.ok ? await savedJobsResponse.json() : [];
+  const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
   const newCurrentJobs = currentJobs.filter(
     ({ fullLink }) => !savedJobs.find((job) => job.fullLink === fullLink),
