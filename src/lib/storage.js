@@ -10,7 +10,7 @@ const headers = { "x-api-key": STORAGE_API_KEY };
 
 const getFile = async (id) => {
   if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {
-    return null;
+    return;
   }
   const url = `${STORAGE_BASE_URL}/files/${id}`;
   console.log(`Getting file ${id} with ${url}`);
@@ -19,7 +19,7 @@ const getFile = async (id) => {
 
 const saveFile = async (id, body) => {
   if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {
-    return null;
+    return;
   }
   headers["Content-Type"] = "application/json";
   const url = `${STORAGE_BASE_URL}/files/${id}`;

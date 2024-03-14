@@ -10,7 +10,7 @@ if (!TEXTER_BASE_URL || !TEXTER_API_KEY) {
 
 const sendText = async (body, to) => {
   if (!TEXTER_BASE_URL || !TEXTER_API_KEY) {
-    return null;
+    return;
   }
   const query = new URLSearchParams({ to, body });
   const url = `${TEXTER_BASE_URL}/send?${query}`;

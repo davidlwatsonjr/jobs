@@ -8,7 +8,7 @@ if (!EMAILER_BASE_URL || !EMAILER_API_KEY) {
 
 const sendEmail = async (body, subject, to) => {
   if (!EMAILER_BASE_URL || !EMAILER_API_KEY) {
-    return null;
+    return;
   }
   const query = new URLSearchParams({ to, subject, body });
   const url = `${EMAILER_BASE_URL}/send?${query}`;
