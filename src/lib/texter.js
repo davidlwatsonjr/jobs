@@ -2,7 +2,16 @@ const { filterForUntextedJobs, filterforNewJobs } = require("./jobs");
 
 const { TEXTER_BASE_URL, TEXTER_API_KEY } = process.env;
 
+if (!TEXTER_BASE_URL || !TEXTER_API_KEY) {
+  console.warn(
+    "TEXTER_BASE_URL and TEXTER_API_KEY environment variables need to be set for emailer to work.",
+  );
+}
+
 const sendText = async (body, to) => {
+  if (!TEXTER_BASE_URL || !TEXTER_API_KEY) {
+    return null;
+  }
   const query = new URLSearchParams({ to, body });
   const url = `${TEXTER_BASE_URL}/send?${query}`;
   const headers = { "x-api-key": TEXTER_API_KEY };
