@@ -14,17 +14,13 @@ const FEED_URLS = {
 const defaultSavedJobsFilename = "jobs/jobs.json";
 
 const getJobs = async (req, res) => {
-  const userUUID = req.headers["x-useruuid"];
-  const savedJobsFilename = isUUID(userUUID)
-    ? `jobs/by-user-uuid/${userUUID}.json`
-    : defaultSavedJobsFilename;
   const { textToNumber, emailToAddress } = req.query;
 
   const [braintrustJobs, { jobs: feedsJobs }, savedJobsResponse] =
     await Promise.all([
       getOpenEngineeringJobs(),
       getFeedsResults(Object.values(FEED_URLS)),
-      getFile(savedJobsFilename),
+      getFile(defaultSavedJobsFilename),
     ]);
   const currentJobs = [...braintrustJobs, ...feedsJobs];
   const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
@@ -56,15 +52,18 @@ const putJob = async (req, res) => {
   const { body } = req;
 
   const savedJobsResponse = await getFile(savedJobsFilename);
-  const savedJobs = savedJobsResponse.ok ? await savedJobsResponse.json() : [];
+  const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
   const job = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
-  if (!job) {
-    res.status(404).send({ error: "Job not found." });
-    return;
+  if (job) {
+    Object.assign(job, body);
+  } else {
+    savedJobs.push({
+      fullLinkMd5,
+      ...body
+    })
   }
 
-  Object.assign(job, body);
   await saveFile(savedJobsFilename, JSON.stringify(savedJobs));
   res.send({ job });
 };
