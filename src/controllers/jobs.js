@@ -39,7 +39,7 @@ const getJobs = async (req, res) => {
   emailUnemailedJobs(jobs, emailToAddress);
   textRandomJob(newCurrentJobs, textToNumber);
 
-  saveFile(savedJobsFilename, JSON.stringify(jobs));
+  saveFile(defaultSavedJobsFilename, JSON.stringify(jobs));
   res.send({ jobs });
 };
 
