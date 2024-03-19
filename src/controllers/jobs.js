@@ -14,32 +14,58 @@ const FEED_URLS = {
 const defaultSavedJobsFilename = "jobs/jobs.json";
 
 const getJobs = async (req, res) => {
+  const userUUID = req.headers["x-useruuid"];
+  const userJobsSettingsFilename = `jobs/by-user-uuid/${userUUID}.json`;
+  const userJobsSettingsPromise = isUUID(userUUID)
+    ? getFile(userJobsSettingsFilename)
+    : Promise.resolve({ ok: false });
   const { textToNumber, emailToAddress } = req.query;
 
-  const [braintrustJobs, { jobs: feedsJobs }, savedJobsResponse] =
-    await Promise.all([
-      getOpenEngineeringJobs(),
-      getFeedsResults(Object.values(FEED_URLS)),
-      getFile(defaultSavedJobsFilename),
-    ]);
+  const [
+    braintrustJobs,
+    { jobs: feedsJobs },
+    savedJobsResponse,
+    userJobsSettingsResponse,
+  ] = await Promise.all([
+    getOpenEngineeringJobs(),
+    getFeedsResults(Object.values(FEED_URLS)),
+    getFile(defaultSavedJobsFilename),
+    userJobsSettingsPromise,
+  ]);
   const currentJobs = [...braintrustJobs, ...feedsJobs];
   const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
   const newCurrentJobs = currentJobs.filter(
-    ({ fullLink }) => !savedJobs.find((job) => job.fullLink === fullLink),
+    ({ fullLinkMD5 }) =>
+      !savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5),
   );
 
-  const savedCurrentJobs = savedJobs.filter(({ fullLink }) =>
-    currentJobs.find((job) => job.fullLink === fullLink),
+  const savedCurrentJobs = savedJobs.filter(({ fullLinkMD5 }) =>
+    currentJobs.find((job) => job.fullLinkMD5 === fullLinkMD5),
   );
 
   const jobs = [...newCurrentJobs, ...savedCurrentJobs];
   jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
 
-  emailUnemailedJobs(jobs, emailToAddress);
-  textRandomJob(newCurrentJobs, textToNumber);
+  await Promise.all([
+    emailUnemailedJobs(jobs, emailToAddress),
+    textRandomJob(newCurrentJobs, textToNumber),
+  ]);
 
   saveFile(defaultSavedJobsFilename, JSON.stringify(jobs));
+
+  const userJobsSettings = userJobsSettingsResponse?.ok
+    ? await userJobsSettingsResponse.json()
+    : [];
+  for (const job of jobs) {
+    const userJobSettings = userJobsSettings.find(
+      (userJobSetting) => userJobSetting.fullLinkMD5 === job.fullLinkMD5,
+    );
+    if (userJobSettings) {
+      Object.assign(job, userJobSettings);
+    }
+  }
+
   res.send({ jobs });
 };
 
@@ -60,12 +86,12 @@ const putJob = async (req, res) => {
   } else {
     savedJobs.push({
       fullLinkMd5,
-      ...body
-    })
+      ...body,
+    });
   }
 
   await saveFile(savedJobsFilename, JSON.stringify(savedJobs));
-  res.send({ job });
+  res.send(savedJobs);
 };
 
 module.exports = {
