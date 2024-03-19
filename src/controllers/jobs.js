@@ -80,18 +80,18 @@ const putJob = async (req, res) => {
   const savedJobsResponse = await getFile(savedJobsFilename);
   const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
-  const job = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
-  if (job) {
-    Object.assign(job, body);
+  const existingJob = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
+  const newJob = { fullLinkMD5, ...body };
+
+  if (existingJob) {
+    Object.assign(existingJob, newJob);
   } else {
-    savedJobs.push({
-      fullLinkMD5,
-      ...body,
-    });
+    savedJobs.push(newJob);
   }
 
-  await saveFile(savedJobsFilename, JSON.stringify(savedJobs));
-  res.send(savedJobs);
+  saveFile(savedJobsFilename, JSON.stringify(savedJobs));
+
+  res.send(newJob);
 };
 
 module.exports = {
