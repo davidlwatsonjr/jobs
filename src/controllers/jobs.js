@@ -85,7 +85,7 @@ const putJob = async (req, res) => {
     Object.assign(job, body);
   } else {
     savedJobs.push({
-      fullLinkMd5,
+      fullLinkMD5,
       ...body,
     });
   }
