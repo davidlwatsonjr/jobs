@@ -7,6 +7,7 @@ const {
   requestLogger,
   serverErrorHandler,
   authAPIRequest,
+  memoryCacher,
 } = require("@davidlwatsonjr/microservice-middleware");
 const { getJobs, putJob } = require("./controllers/jobs");
 const {
@@ -15,7 +16,6 @@ const {
 } = require("./controllers/braintrust");
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
-const { memoryCacher } = require("./middleware/memory-cacher");
 
 const app = express();
 
