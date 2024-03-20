@@ -13,7 +13,7 @@ const feeds = async (req, res) => {
   const { textToNumber, emailToAddress } = req.query;
 
   const savedJobsFilename = "jobs/feeds.json";
-  const [{ jobs }, knownJobsResponse] = await Promise.all([
+  const [jobs, knownJobsResponse] = await Promise.all([
     getFeedsResults(Object.values(FEED_URLS)),
     getFile(savedJobsFilename),
   ]);
@@ -35,11 +35,11 @@ const feeds = async (req, res) => {
 };
 
 const nodesk = async (req, res) => {
-  res.send(await getFeedsResults([FEED_URLS.NO_DESK]));
+  res.send({ jobs: await getFeedsResults([FEED_URLS.NO_DESK]) });
 };
 
 const weworkremotely = async (req, res) => {
-  res.send(await getFeedsResults([FEED_URLS.WE_WORK_REMOTELY]));
+  res.send({ jobs: await getFeedsResults([FEED_URLS.WE_WORK_REMOTELY]) });
 };
 
 module.exports = {

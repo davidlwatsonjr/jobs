@@ -6,7 +6,7 @@ const getFeedsResults = async (feedUrls) => {
     feedUrls.map((feedUrl) => parse(feedUrl)),
   );
 
-  const jobs = feedResults
+  return feedResults
     .flatMap((feedResult) => feedResult.items)
     .map((job) => ({
       fullLink: job.link,
@@ -14,8 +14,6 @@ const getFeedsResults = async (feedUrls) => {
       createdDate: new Date(job.created).toLocaleDateString(),
       ...job,
     }));
-
-  return { jobs };
 };
 
 module.exports = { getFeedsResults };

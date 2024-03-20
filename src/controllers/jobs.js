@@ -23,7 +23,7 @@ const getJobs = async (req, res) => {
 
   const [
     braintrustJobs,
-    { jobs: feedsJobs },
+    feedsJobs,
     savedJobsResponse,
     userJobsSettingsResponse,
   ] = await Promise.all([
