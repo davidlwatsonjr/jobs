@@ -15,6 +15,7 @@ const {
 } = require("./controllers/braintrust");
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
+const { memoryCacher } = require("./middleware/memory-cacher");
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.get("/ping", async (req, res) => {
 const useUserUUIDOrAPIKey = (req, res, next) => {
   isUUID(req.headers["x-useruuid"]) ? next() : authAPIRequest(req, res, next);
 };
+
+app.get("*", memoryCacher(60, "jobs", ["x-api-key", "x-useruuid"]));
 
 app.get("/jobs", getJobs);
 app.put("/jobs/:fullLinkMD5", useUserUUIDOrAPIKey, express.json(), putJob);
