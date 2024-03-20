@@ -36,10 +36,15 @@ const useUserUUIDOrAPIKey = (req, res, next) => {
 };
 
 app.get("*", memoryCacher(60, "jobs", ["x-api-key", "x-useruuid"]));
-app.put("*", memoryCacheBuster("jobs", ["x-api-key", "x-useruuid"]));
 
 app.get("/jobs", getJobs);
-app.put("/jobs/:fullLinkMD5", useUserUUIDOrAPIKey, express.json(), putJob);
+app.put(
+  "/jobs/:fullLinkMD5",
+  useUserUUIDOrAPIKey,
+  express.json(),
+  memoryCacheBuster("jobs", ["x-api-key", "x-useruuid"], ["/jobs"]),
+  putJob,
+);
 
 app.get("/braintrust", braintrust);
 app.get("/braintrust/applications", braintrustApplications);
