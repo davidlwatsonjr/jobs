@@ -8,6 +8,7 @@ const {
   serverErrorHandler,
   authAPIRequest,
   memoryCacher,
+  memoryCacheBuster,
 } = require("@davidlwatsonjr/microservice-middleware");
 const { getJobs, putJob } = require("./controllers/jobs");
 const {
@@ -35,6 +36,7 @@ const useUserUUIDOrAPIKey = (req, res, next) => {
 };
 
 app.get("*", memoryCacher(60, "jobs", ["x-api-key", "x-useruuid"]));
+app.put("*", memoryCacheBuster("jobs", ["x-api-key", "x-useruuid"]));
 
 app.get("/jobs", getJobs);
 app.put("/jobs/:fullLinkMD5", useUserUUIDOrAPIKey, express.json(), putJob);
