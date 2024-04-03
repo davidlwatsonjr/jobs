@@ -1,3 +1,5 @@
+const { fetch } = require("../util/cachedFetchWithRetry");
+
 const { STORAGE_BASE_URL, STORAGE_API_KEY } = process.env;
 
 if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {

@@ -1,3 +1,5 @@
+const { fetch } = require("../util/cachedFetchWithRetry");
+
 const { EMAILER_BASE_URL, EMAILER_API_KEY } = process.env;
 
 if (!EMAILER_BASE_URL || !EMAILER_API_KEY) {

@@ -1,3 +1,5 @@
+const { fetch } = require("../util/cachedFetchWithRetry");
+
 const { filterForUntextedJobs, filterforNewJobs } = require("./jobs");
 
 const { TEXTER_BASE_URL, TEXTER_API_KEY } = process.env;

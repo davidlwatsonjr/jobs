@@ -1,3 +1,4 @@
+const { fetch } = require("../util/cachedFetchWithRetry");
 const { md5 } = require("../util/md5");
 
 const {
