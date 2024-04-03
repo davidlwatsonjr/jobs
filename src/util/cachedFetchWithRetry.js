@@ -14,8 +14,6 @@ const fetch = async (url, options) => {
     .digest("hex");
 
   if (!memoryCache[cacheKey]) {
-    console.log(`Cache key not found: ${cacheKey}`);
-
     let fetchFn;
     try {
       fetchFn = require("fetch-retry")(global.fetch);
@@ -36,7 +34,6 @@ const fetch = async (url, options) => {
     }, 60000);
   }
 
-  console.log(`Returning cached ${cacheKey}`);
   return Promise.resolve(
     convertTextToPartialFetchReponse(memoryCache[cacheKey]),
   );
