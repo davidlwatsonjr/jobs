@@ -7,6 +7,7 @@
     "predeploy": "gcloud config set project davidlwatsonjr",
     "deploy": "gcloud run deploy jobs --source .",
     "docker:build": "docker build -t jobs .",
+    "predocker:start": "npm run docker:build",
     "docker:start": "docker run -p 8080:8080 jobs",
     "eslint": "eslint",
     "format": "prettier --write \"src/**/*.js\"",
