@@ -1,4 +1,4 @@
-const { fetch } = require("../util/cachedFetchWithRetry");
+const { fetch } = require("@davidlwatsonjr/fetch-retry-with-cache");
 
 const { EMAILER_BASE_URL, EMAILER_API_KEY } = process.env;
 

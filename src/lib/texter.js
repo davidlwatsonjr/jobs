@@ -1,4 +1,4 @@
-const { fetch } = require("../util/cachedFetchWithRetry");
+const { fetch } = require("@davidlwatsonjr/fetch-retry-with-cache");
 
 const { filterForUntextedJobs, filterforNewJobs } = require("./jobs");
 

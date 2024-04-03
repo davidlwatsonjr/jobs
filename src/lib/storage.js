@@ -1,4 +1,4 @@
-const { fetch } = require("../util/cachedFetchWithRetry");
+const { fetch } = require("@davidlwatsonjr/fetch-retry-with-cache");
 
 const { STORAGE_BASE_URL, STORAGE_API_KEY } = process.env;
 
