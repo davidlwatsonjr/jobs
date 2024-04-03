@@ -10,7 +10,9 @@ const DEFAULT_CACHE_LENGTH = 60000;
 let fetchFn = global.fetch;
 try {
   fetchFn = require("fetch-retry")(fetchFn);
-} catch (err) {}
+} catch (err) {
+  console.warn("fetch-retry is unavailable. Falling back to native fetch.");
+}
 
 const getCacheKey = (optionsObject) => {
   return require("crypto")
