@@ -17,7 +17,7 @@ const getJobs = async (req, res) => {
   const userUUID = req.headers["x-useruuid"];
   const userJobsSettingsFilename = `jobs/by-user-uuid/${userUUID}.json`;
   const userJobsSettingsPromise = isUUID(userUUID)
-    ? getFile(userJobsSettingsFilename)
+    ? getFile(userJobsSettingsFilename, { cacheTTL: 0 })
     : Promise.resolve({ ok: false });
   const { textToNumber, emailToAddress } = req.query;
 

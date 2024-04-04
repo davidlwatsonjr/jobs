@@ -10,13 +10,13 @@ if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {
 
 const headers = { "x-api-key": STORAGE_API_KEY };
 
-const getFile = async (id) => {
+const getFile = async (id, fetchOptions = {}) => {
   if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {
     return;
   }
   const url = `${STORAGE_BASE_URL}/files/${id}`;
   console.log(`Getting file ${id} with ${url}`);
-  return await fetch(url, { headers });
+  return await fetch(url, { headers, ...fetchOptions });
 };
 
 const saveFile = async (id, body) => {
