@@ -18,6 +18,9 @@ const {
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
 
+const { MEMORY_CACHE_TTL } = process.env;
+const DEFAULT_MEMORY_CACHE_TTL = 60;
+
 const app = express();
 
 app.use(gcpLogTransformer);
@@ -35,7 +38,10 @@ const useUserUUIDOrAPIKey = (req, res, next) => {
   isUUID(req.headers["x-useruuid"]) ? next() : authAPIRequest(req, res, next);
 };
 
-app.get("*", memoryCacher(60, "jobs", ["x-api-key", "x-useruuid"]));
+const memoryCacheTTL = !isNaN(parseInt(MEMORY_CACHE_TTL))
+  ? parseInt(MEMORY_CACHE_TTL)
+  : DEFAULT_MEMORY_CACHE_TTL;
+app.get("*", memoryCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]));
 
 app.get("/jobs", getJobs);
 app.put(
