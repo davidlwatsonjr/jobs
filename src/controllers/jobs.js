@@ -77,7 +77,7 @@ const putJob = async (req, res) => {
   const { fullLinkMD5 } = req.params;
   const { body } = req;
 
-  const savedJobsResponse = await getFile(savedJobsFilename);
+  const savedJobsResponse = await getFile(savedJobsFilename, { cacheTTL: 0 });
   const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
   const existingJob = savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5);
@@ -89,7 +89,7 @@ const putJob = async (req, res) => {
     savedJobs.push(newJob);
   }
 
-  saveFile(savedJobsFilename, JSON.stringify(savedJobs));
+  saveFile(savedJobsFilename, JSON.stringify(savedJobs), { cacheTTL: 0 });
 
   res.send(newJob);
 };

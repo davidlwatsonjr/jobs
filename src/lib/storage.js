@@ -19,7 +19,7 @@ const getFile = async (id, fetchOptions = {}) => {
   return await fetch(url, { headers, ...fetchOptions });
 };
 
-const saveFile = async (id, body) => {
+const saveFile = async (id, body, fetchOptions = {}) => {
   if (!STORAGE_BASE_URL || !STORAGE_API_KEY) {
     return;
   }
@@ -32,6 +32,7 @@ const saveFile = async (id, body) => {
     headers,
     method: "PUT",
     body: fetchBody,
+    ...fetchOptions,
   });
   console.log(`Updated ${id}`);
   return response;
