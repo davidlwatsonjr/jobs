@@ -15,6 +15,7 @@ const {
 } = require("./controllers/braintrust");
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
+const { storageCacher } = require("./middleware/storageCacher");
 
 const { MEMORY_CACHE_TTL } = process.env;
 const DEFAULT_MEMORY_CACHE_TTL = 60;
@@ -39,7 +40,11 @@ const useUserUUIDOrAPIKey = (req, res, next) => {
 const memoryCacheTTL = !isNaN(parseInt(MEMORY_CACHE_TTL))
   ? parseInt(MEMORY_CACHE_TTL)
   : DEFAULT_MEMORY_CACHE_TTL;
-app.get("*", memoryCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]));
+app.get(
+  "*",
+  memoryCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
+  storageCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
+);
 
 app.get("/jobs", getJobs);
 app.put(
