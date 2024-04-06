@@ -17,8 +17,9 @@ const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
 const { storageCacher } = require("./middleware/storageCacher");
 
-const { MEMORY_CACHE_TTL } = process.env;
+const { MEMORY_CACHE_TTL, STORAGE_CACHE_TTL } = process.env;
 const DEFAULT_MEMORY_CACHE_TTL = 60;
+const DEFAULT_STORAGE_CACHE_TTL = 60;
 
 const app = express();
 
@@ -40,10 +41,13 @@ const useUserUUIDOrAPIKey = (req, res, next) => {
 const memoryCacheTTL = !isNaN(parseInt(MEMORY_CACHE_TTL))
   ? parseInt(MEMORY_CACHE_TTL)
   : DEFAULT_MEMORY_CACHE_TTL;
+const storageCacheTTL = !isNaN(parseInt(STORAGE_CACHE_TTL))
+  ? parseInt(STORAGE_CACHE_TTL)
+  : DEFAULT_STORAGE_CACHE_TTL;
 app.get(
   "*",
   memoryCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
-  storageCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
+  storageCacher(storageCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
 );
 
 app.get("/jobs", getJobs);

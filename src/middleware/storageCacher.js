@@ -21,7 +21,7 @@ const storageCacher = (duration, namespace, headerKeys) => {
     if (cachedBody && cachedBody.expires > Date.now()) {
       res.send(cachedBody.body);
     } else {
-      res.sendStorageCachedResponse = res.send;
+      res.preStorageCachedSendFn = res.send;
       res.send = (body) => {
         storage.saveFile(
           cacheFilename,
@@ -31,7 +31,8 @@ const storageCacher = (duration, namespace, headerKeys) => {
           }),
           { cacheTTL: 0 },
         );
-        res.sendStorageCachedResponse(body);
+        res.send = res.preStorageCachedSendFn;
+        res.send(body);
       };
       next();
     }
