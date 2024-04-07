@@ -18,7 +18,15 @@ const saveFile = async (name, data, saveOptions) => {
   return await bucket.file(name).save(data, saveOptions);
 };
 
+const deleteFile = async (name) => {
+  return await bucket
+    .file(name)
+    .delete()
+    .catch(() => null);
+};
+
 module.exports = {
   getFile,
   saveFile,
+  deleteFile,
 };
