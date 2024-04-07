@@ -12,7 +12,7 @@ const storageCacher = (duration, namespace, headerKeys) => {
 
     const url = req.originalUrl || req.url;
     const cacheKey = getCacheKey(url, namespace, req.headers, headerKeys);
-    const cacheFilename = `jobs/cache/${cacheKey}`;
+    const cacheFilename = `${namespace}/cache/${cacheKey}`;
 
     const cacheObjectString = await storage.getFile(cacheFilename);
 

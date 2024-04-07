@@ -10,7 +10,7 @@ const storageCacheBuster = (namespace, headerKeys, urls = []) => {
     }
     urls.map((url) => {
       const cacheKey = getCacheKey(url, namespace, req.headers, headerKeys);
-      const cacheFilename = `jobs/cache/${cacheKey}`;
+      const cacheFilename = `${namespace}/cache/${cacheKey}`;
       return storage.deleteFile(cacheFilename);
     });
     next();
