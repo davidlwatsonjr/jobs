@@ -25,6 +25,7 @@
   "dependencies": {
     "@davidlwatsonjr/fetch-retry-with-cache": "^1.0.1",
     "@davidlwatsonjr/microservice-middleware": "^1.0.0",
+    "@google-cloud/storage": "^7.9.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "fetch-retry": "^5.0.0",

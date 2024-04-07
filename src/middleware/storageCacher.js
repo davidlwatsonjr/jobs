@@ -1,7 +1,7 @@
 const {
   getCacheKey,
 } = require("@davidlwatsonjr/microservice-middleware/src/lib/getCacheKey");
-const storage = require("../lib/storage");
+const storage = require("../lib/google-cloud-storage");
 
 const storageCacher = (duration, namespace, headerKeys) => {
   return async (req, res, next) => {
@@ -13,13 +13,14 @@ const storageCacher = (duration, namespace, headerKeys) => {
     const url = req.originalUrl || req.url;
     const cacheKey = getCacheKey(url, namespace, req.headers, headerKeys);
     const cacheFilename = `jobs/cache/${cacheKey}`;
-    const cachedStorageResponse = await storage.getFile(cacheFilename);
 
-    const cachedBody = cachedStorageResponse?.ok
-      ? await cachedStorageResponse.json()
+    const cacheObjectString = await storage.getFile(cacheFilename);
+
+    const cacheObject = cacheObjectString
+      ? JSON.parse(cacheObjectString)
       : null;
-    if (cachedBody && cachedBody.expires > Date.now()) {
-      res.send(cachedBody.body);
+    if (cacheObject && cacheObject.expires > Date.now()) {
+      res.send(cacheObject.body);
     } else {
       res.preStorageCachedSendFn = res.send;
       res.send = (body) => {
