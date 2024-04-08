@@ -58,7 +58,7 @@ const getJobs = async (req, res) => {
     ? await userJobsSettingsResponse.json()
     : [];
   for (const job of jobs) {
-    const userJobSettings = userJobsSettings.find(
+    const userJobSettings = userJobsSettings?.find(
       (userJobSetting) => userJobSetting.fullLinkMD5 === job.fullLinkMD5,
     );
     if (userJobSettings) {
