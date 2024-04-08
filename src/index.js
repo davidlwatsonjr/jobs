@@ -5,6 +5,8 @@ const {
   requestLogger,
   serverErrorHandler,
   authAPIRequest,
+  gcStorageCacher,
+  gcStorageCacheBuster,
   memoryCacher,
   memoryCacheBuster,
 } = require("@davidlwatsonjr/microservice-middleware");
@@ -15,10 +17,8 @@ const {
 } = require("./controllers/braintrust");
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
-const { storageCacher } = require("./middleware/storage-cacher");
-const { storageCacheBuster } = require("./middleware/storage-cache-buster");
 
-const { MEMORY_CACHE_TTL, STORAGE_CACHE_TTL } = process.env;
+const { GCS_BUCKET, MEMORY_CACHE_TTL, STORAGE_CACHE_TTL } = process.env;
 const DEFAULT_MEMORY_CACHE_TTL = 60;
 const DEFAULT_STORAGE_CACHE_TTL = 60;
 
@@ -48,7 +48,10 @@ const storageCacheTTL = !isNaN(parseInt(STORAGE_CACHE_TTL))
 app.get(
   "*",
   memoryCacher(memoryCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
-  storageCacher(storageCacheTTL, "jobs", ["x-api-key", "x-useruuid"]),
+  gcStorageCacher(GCS_BUCKET, storageCacheTTL, "jobs", [
+    "x-api-key",
+    "x-useruuid",
+  ]),
 );
 
 app.get("/jobs", getJobs);
@@ -57,7 +60,12 @@ app.put(
   useUserUUIDOrAPIKey,
   express.json(),
   memoryCacheBuster("jobs", ["x-api-key", "x-useruuid"], ["/jobs"]),
-  storageCacheBuster("jobs", ["x-api-key", "x-useruuid"], ["/jobs"]),
+  gcStorageCacheBuster(
+    GCS_BUCKET,
+    "jobs",
+    ["x-api-key", "x-useruuid"],
+    ["/jobs"],
+  ),
   putJob,
 );
 
