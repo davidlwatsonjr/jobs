@@ -3,7 +3,14 @@ const { md5 } = require("../util/md5");
 
 const getFeedsResults = async (feedUrls) => {
   const feedResults = await Promise.all(
-    feedUrls.map((feedUrl) => parse(feedUrl)),
+    feedUrls.map(async (feedUrl) => {
+      try {
+        return await parse(feedUrl);
+      } catch (err) {
+        console.error(`ERROR parsing feed URL ${feedUrl}: ${err.message}`);
+        return { items: [] };
+      }
+    }),
   );
 
   return feedResults
