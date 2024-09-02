@@ -18,6 +18,18 @@ const {
 const { feeds, nodesk, weworkremotely } = require("./controllers/feeds");
 const { isUUID } = require("./util/isUUID");
 
+const { SECRETS } = process.env;
+if (SECRETS) {
+  try {
+    const secrets = JSON.parse(secrets.replace(/\n/g, ""));
+    Object.keys(secrets).forEach((key) => {
+      process.env[key] = secrets[key];
+    });
+  } catch (e) {
+    console.error("Error parsing SECRETS JSON", e);
+  }
+}
+
 const { GCS_BUCKET, MEMORY_CACHE_TTL, STORAGE_CACHE_TTL } = process.env;
 const DEFAULT_MEMORY_CACHE_TTL = 60;
 const DEFAULT_STORAGE_CACHE_TTL = 60;
@@ -35,7 +47,7 @@ app.get("/ping", async (req, res) => {
   res.send("pong");
 });
 
-const apiAuthHandler = authAPIRequest('JOBS');
+const apiAuthHandler = authAPIRequest("JOBS");
 const useUserUUIDOrAPIKey = (req, res, next) => {
   isUUID(req.headers["x-useruuid"]) ? next() : apiAuthHandler(req, res, next);
 };
