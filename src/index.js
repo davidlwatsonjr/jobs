@@ -1,7 +1,7 @@
 const { SECRETS } = process.env;
 if (SECRETS) {
   try {
-    const secrets = JSON.parse(secrets.replace(/\n/g, ""));
+    const secrets = JSON.parse(SECRETS.replace(/\n/g, ""));
     Object.keys(secrets).forEach((key) => {
       process.env[key] = secrets[key];
     });
