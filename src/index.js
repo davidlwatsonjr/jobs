@@ -35,8 +35,9 @@ app.get("/ping", async (req, res) => {
   res.send("pong");
 });
 
+const apiAuthHandler = authAPIRequest('JOBS');
 const useUserUUIDOrAPIKey = (req, res, next) => {
-  isUUID(req.headers["x-useruuid"]) ? next() : authAPIRequest(req, res, next);
+  isUUID(req.headers["x-useruuid"]) ? next() : apiAuthHandler(req, res, next);
 };
 
 const memoryCacheTTL = !isNaN(parseInt(MEMORY_CACHE_TTL))
