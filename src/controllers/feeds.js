@@ -4,6 +4,7 @@ const { textBestRandomJob } = require("../lib/texter");
 const { getFile, saveFile } = require("../lib/storage");
 
 const FEED_URLS = {
+  JOBSPRESSO: "https://jobspresso.co/remote-software-jobs/feed/",
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
   REMOTE_OK: "https://remoteok.com/remote-jobs.rss",
   REMOTIVE: "https://remotive.com/remote-jobs/feed/software-dev",
