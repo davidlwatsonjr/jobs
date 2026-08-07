@@ -8,6 +8,8 @@ const FEED_URLS = {
   NO_DESK: "https://nodesk.co/remote-jobs/index.xml",
   REMOTE_OK: "https://remoteok.com/remote-jobs.rss",
   REMOTIVE: "https://remotive.com/remote-jobs/feed/software-dev",
+  WE_WORK_REMOTELY:
+    "https://weworkremotely.com/categories/remote-programming-jobs.rss",
 };
 
 const feeds = async (req, res) => {
