@@ -25,9 +25,7 @@ const SIDE_GIG_TERMS = [
   "consultant",
   "consulting",
   "fractional",
-  "part-time",
   "part time",
-  "project-based",
   "project based",
   "1099",
 ];
@@ -39,13 +37,17 @@ const normalizeText = (value) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 
-const getJobFingerprint = (job) =>
-  md5(
+const getJobFingerprint = (job) => {
+  if (!job.company) {
+    return md5(job.fullLink);
+  }
+  return md5(
     [job.company, job.title, job.location]
       .map(normalizeText)
       .filter(Boolean)
       .join("|"),
   );
+};
 
 const getJobMatchScore = (job) => {
   const title = normalizeText(job.title);
@@ -53,15 +55,21 @@ const getJobMatchScore = (job) => {
     [job.title, job.description, job.employmentType, job.seniority].join(" "),
   );
   return (
-    HIGH_VALUE_TERMS.reduce(
-      (score, term) =>
-        score + (title.includes(term) ? 8 : searchable.includes(term) ? 3 : 0),
-      0,
-    ) +
-    SIDE_GIG_TERMS.reduce(
-      (score, term) => score + (searchable.includes(term) ? 4 : 0),
-      0,
-    )
+    HIGH_VALUE_TERMS.reduce((score, term) => {
+      const normalizedTerm = normalizeText(term);
+      return (
+        score +
+        (title.includes(normalizedTerm)
+          ? 8
+          : searchable.includes(normalizedTerm)
+            ? 3
+            : 0)
+      );
+    }, 0) +
+    SIDE_GIG_TERMS.reduce((score, term) => {
+      const normalizedTerm = normalizeText(term);
+      return score + (searchable.includes(normalizedTerm) ? 4 : 0);
+    }, 0)
   );
 };
 
