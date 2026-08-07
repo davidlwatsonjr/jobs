@@ -2,6 +2,8 @@ const { getOpenEngineeringJobs } = require("../lib/braintrust");
 const { emailUnemailedJobs } = require("../lib/emailer");
 const { textRandomJob } = require("../lib/texter");
 const { getFeedsResults } = require("../lib/feeds");
+const { getProviderJobs } = require("../lib/providers");
+const { dedupeAndRankJobs } = require("../lib/jobRanking");
 const { getFile, saveFile } = require("../lib/storage");
 const { isUUID } = require("../util/isUUID");
 
@@ -24,15 +26,21 @@ const getJobs = async (req, res) => {
   const [
     braintrustJobs,
     feedsJobs,
+    providerJobs,
     savedJobsResponse,
     userJobsSettingsResponse,
   ] = await Promise.all([
     getOpenEngineeringJobs(),
     getFeedsResults(Object.values(FEED_URLS)),
+    getProviderJobs(),
     getFile(defaultSavedJobsFilename),
     userJobsSettingsPromise,
   ]);
-  const currentJobs = [...braintrustJobs, ...feedsJobs];
+  const currentJobs = dedupeAndRankJobs([
+    ...braintrustJobs,
+    ...feedsJobs,
+    ...providerJobs,
+  ]);
   const savedJobs = savedJobsResponse?.ok ? await savedJobsResponse.json() : [];
 
   const newCurrentJobs = currentJobs.filter(
@@ -40,12 +48,12 @@ const getJobs = async (req, res) => {
       !savedJobs.find((job) => job.fullLinkMD5 === fullLinkMD5),
   );
 
-  const savedCurrentJobs = savedJobs.filter(({ fullLinkMD5 }) =>
-    currentJobs.find((job) => job.fullLinkMD5 === fullLinkMD5),
-  );
-
-  const jobs = [...newCurrentJobs, ...savedCurrentJobs];
-  jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+  const jobs = currentJobs.map((currentJob) => {
+    const savedJob = savedJobs.find(
+      ({ fullLinkMD5 }) => fullLinkMD5 === currentJob.fullLinkMD5,
+    );
+    return savedJob ? { ...savedJob, ...currentJob } : currentJob;
+  });
 
   await Promise.all([
     emailUnemailedJobs(jobs, emailToAddress),
